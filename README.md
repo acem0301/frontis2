@@ -12,4 +12,4 @@
     npm run serve
     ```
 
-Esto es una prueba
+Esto es una prueba dos.
