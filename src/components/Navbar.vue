@@ -29,8 +29,9 @@ export default {
       drawer: false,
       items: [
         { title: "Dashboard", icon: "mdi-view-dashboard", route: "/login" },
-        { title: "Mi perfil", icon: "mdi-account", route: "" },
-        { title: "Usuarios", icon: "mdi-account-group-outline", route: "" }
+        { title: "Administración", icon: "mdi-account", route: "" },
+        { title: "Configuración", icon: "mdi-settings", route: "" },
+        { title: "Desarrollo", icon: "mdi-account-group-outline", route: "" }
       ],
       mini: true
     };
