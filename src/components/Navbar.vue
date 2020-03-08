@@ -25,8 +25,7 @@
       <v-list dense>
         <v-list-item
           v-for="item in items"
-          :key="item.title"
-          link
+          :key="item.title" router :to='item.route'
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -48,7 +47,7 @@
       return {
         drawer: true,
         items: [
-          { title: 'Home', icon: 'mdi-home-city' },
+          { title: 'Login', icon: 'mdi-home-city', route:'/login' },
           { title: 'My Account', icon: 'mdi-account' },
           { title: 'Users', icon: 'mdi-account-group-outline' },
         ],
