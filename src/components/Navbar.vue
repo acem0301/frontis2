@@ -1,32 +1,13 @@
 <template>
-  <v-card>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      permanent
-    >
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title>John Leider</v-list-item-title>
-
-        <v-btn
-          icon
-          @click.stop="mini = !mini"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
+  <nav>
+    <v-toolbar>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-spacer></v-spacer>
+      <v-btn class="error">Salir</v-btn>
+    </v-toolbar>
+    <v-navigation-drawer app v-model="drawer" class="primary">
       <v-list dense>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title" router :to='item.route'
-        >
+        <v-list-item v-for="item in items" :key="item.title" router :to="item.route">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -37,25 +18,24 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-  </v-card>
+  </nav>
 </template>
 
 <script>
-  export default {
-    name: 'NavBar',
-    data () {
-      return {
-        drawer: true,
-        items: [
-          { title: 'Login', icon: 'mdi-home-city', route:'/login' },
-          { title: 'My Account', icon: 'mdi-account' },
-          { title: 'Users', icon: 'mdi-account-group-outline' },
-        ],
-        mini: true,
-      }
-    },
+export default {
+  name: "NavBar",
+  data() {
+    return {
+      drawer: false,
+      items: [
+        { title: "Dashboard", icon: "mdi-view-dashboard", route: "/login" },
+        { title: "Mi perfil", icon: "mdi-account", route: "" },
+        { title: "Usuarios", icon: "mdi-account-group-outline", route: "" }
+      ],
+      mini: true
+    };
   }
+};
 </script>
 <style>
-
 </style>

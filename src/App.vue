@@ -1,18 +1,18 @@
 <template>
-  <div id="app">
-    <div class="container">
-      <router-view />
-      <div>
-        <h1>{{text}}</h1>
-      </div>
-    </div>
+  <v-app>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
     
-  </div>
+  </v-app>
 </template>
 
 <script>
 //import Navbar from './components/Navbar.vue';
 export default {
+  // components:{
+  //   Navbar
+  // },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
