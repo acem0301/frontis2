@@ -1,7 +1,12 @@
 <template>
   <div id="app">
+    <NavBar></NavBar>
     <nav class="navbar navbar-expand navbar-dark bg-dark">
-      <a href class="navbar-brand" @click.prevent>bezKoder</a>
+      <button type="button" class="v-app-bar__nav-icon hidden-lg-and-up v-btn v-btn--flat v-btn--icon v-btn--round theme--dark v-size--default">
+          <span class="v-btn__content">
+          <i aria-hidden="true" class="v-icon notranslate mdi mdi-menu theme--dark"></i>
+          </span>
+        </button>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
           <router-link to="/home" class="nav-link">
@@ -49,12 +54,20 @@
 
     <div class="container">
       <router-view />
+      <div>
+        <h1>{{text}}</h1>
+      </div>
     </div>
+    
   </div>
 </template>
 
 <script>
+import NavBar from './components/Navbar.vue';
 export default {
+  components:{
+    NavBar
+  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -78,6 +91,11 @@ export default {
     logOut() {
       this.$store.dispatch('auth/logout');
       this.$router.push('/login');
+    }
+  },
+  data(){
+    return{
+      text: "Esto devuelve una propiedad que quiero que se muestre en la vista"
     }
   }
 };
