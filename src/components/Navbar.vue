@@ -3,7 +3,7 @@
     <v-toolbar>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
-      <v-btn class="error">Salir</v-btn>
+      <v-btn class="error" href @click.prevent="logOut">Salir</v-btn>
     </v-toolbar>
     <v-navigation-drawer app v-model="drawer" class="primary">
       <v-list dense>
@@ -35,6 +35,12 @@ export default {
       ],
       mini: true
     };
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+    }
   }
 };
 </script>
