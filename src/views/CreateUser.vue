@@ -1,57 +1,65 @@
 <template>
-  <div class="container">
+  <div>
+    <NavBar></NavBar>
+    <div class="container">
     <!-- <header class="jumbotron"> -->
       <h3>Crear Usuario</h3>
     <!-- </header> -->
     <body>
-       
-<template>
-  <v-form v-model="valid">
-    <v-container>
-        <v-row>
-        <v-col cols="12" md="6">
-            <v-text-field v-model="nombre" :rules="nameRules" 
-            :counter="10" label="Nombre" required></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
-            <v-text-field v-model="apellido" :rules="nameRules" 
-            :counter="10" label="Apellido" required></v-text-field>
-        </v-col>
-         </v-row>
-        <v-row>
-            <v-col cols="12" md="6">
-                <v-text-field v-model="email" :rules="emailRules" 
-                label="E-mail" required></v-text-field>
-            </v-col>
-        </v-row>
-       <v-row>
-            <v-col cols="12" md="6">
-                <v-text-field v-model="nombre_usuario" :rules="nameRules" 
-                :counter="10" label="Nombre de Usuario" required></v-text-field>
-            </v-col>
-         </v-row>
-       <v-row>
-            <v-col cols="12" md="6">
-               <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'" name="password"
-                    label="Contraseña" hint="Al menos 8 caracteres" counter 
-                    @click:append="show1 = !show1">
-                </v-text-field>
-            </v-col>
-         </v-row>
-         <v-row>
-            <v-col cols="12" md="6" style="text-align: end;">
-               <v-btn color="" class="primary" @click="resetValidation">
-                    Crear
-                </v-btn>
-            </v-col>
-         </v-row>
-    </v-container>
-  </v-form>
-</template>
+      <template>
+        <v-form v-model="valid">
+          <v-container>
+              <v-row>
+              <v-col cols="12" md="6">
+                  <v-text-field v-model="nombre" :rules="nameRules" 
+                  :counter="10" label="Nombre" required></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                  <v-text-field v-model="apellido" :rules="nameRules" 
+                  :counter="10" label="Apellido" required></v-text-field>
+              </v-col>
+              </v-row>
+              <v-row>
+                  <v-col cols="12" md="6">
+                      <v-text-field v-model="email" :rules="emailRules" 
+                      label="E-mail" required></v-text-field>
+                  </v-col>
+              </v-row>
+            <v-row>
+                  <v-col cols="12" md="6">
+                      <v-text-field v-model="nombre_usuario" :rules="nameRules" 
+                      :counter="10" label="Nombre de Usuario" required></v-text-field>
+                  </v-col>
+              </v-row>
+            <v-row>
+                  <v-col cols="12" md="6">
+                    <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                          :type="show1 ? 'text' : 'password'" name="password"
+                          label="Contraseña" hint="Al menos 8 caracteres" counter 
+                          @click:append="show1 = !show1">
+                      </v-text-field>
+                  </v-col>
+              </v-row>
+              <v-row align="center">
+                <v-col class="d-flex" cols="12" sm="6">
+                    <v-select :items="items" label="Rol" v-model="select"
+                      ></v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                  <v-col cols="12" md="6" style="text-align: end;">
+                    <v-btn color="" class="primary" @click="resetValidation">
+                          Crear
+                      </v-btn>
+                  </v-col>
+              </v-row>
+          </v-container>
+        </v-form>
+      </template>
     </body>
+  </div>
   </div>
 </template>
 
@@ -90,6 +98,13 @@ export default {
   }
 };
 </script>
+<script>
+  export default {
+    data: () => ({
+      items: ['Administrador', 'Líder de proyecto', 'Desarrollador'],
+    }),
+  }
+</script>
 
 <style scoped>
     table{
@@ -101,3 +116,10 @@ export default {
     }
 </style>
 <!-- :rules="[rules.required, rules.min]"  reglas del pass--> 
+<script>
+  export default {
+    data: () => ({
+      items: ['Administrador', 'Líder de proyecto', 'Desarrollador'],
+    }),
+  }
+</script>

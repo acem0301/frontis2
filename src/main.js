@@ -8,6 +8,7 @@ import VeeValidate from 'vee-validate';
 import Vuex from 'vuex';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import NavBar from './components/Navbar.vue';
 
 import {
   faHome,
@@ -26,6 +27,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VeeValidate);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('NavBar', NavBar);
 
 Vue.use(Vuex);
 
