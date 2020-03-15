@@ -5,44 +5,77 @@
       <v-spacer></v-spacer>
       <v-btn class="error" href @click.prevent="logOut">Salir</v-btn>
     </v-toolbar>
-    <v-navigation-drawer app v-model="drawer" class="primary">
-      <v-list dense>
-        <v-list-item v-for="item in items" :key="item.title" router :to="item.route">
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-
+    <v-navigation-drawer app v-model="drawer" class="dark">
+      <v-list>
+      <v-list-group
+        v-for="item in items"
+        :key="item.title"
+        v-model="item.active"
+        :prepend-icon="item.action"
+        no-action
+      >
+        <template v-slot:activator>
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          v-for="subItem in item.items"
+          :key="subItem.title"
+          :to="subItem.route"
+        >
+          <v-list-item-content>
+            <v-list-item-title v-text="subItem.title"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </v-list>
+      </v-list-group>
+    </v-list>
     </v-navigation-drawer>
+     <router-view />
   </nav>
 </template>
 
+
 <script>
-export default {
-  name: "NavBar",
-  data() {
-    return {
-      drawer: false,
-      items: [
-        { title: "Dashboard", icon: "mdi-view-dashboard", route: "/login" },
-        { title: "Administración", icon: "mdi-account", route: "" },
-        { title: "Configuración", icon: "mdi-settings", route: "" },
-        { title: "Desarrollo", icon: "mdi-account-group-outline", route: "" }
-      ],
-      mini: true
-    };
-  },
-  methods: {
-    logOut() {
-      this.$store.dispatch('auth/logout');
-      this.$router.push('/login');
-    }
+  export default {
+    name: "NavBar",
+    data () {
+      return {
+        drawer: false,
+        items: [
+          {
+            action: 'mdi-home',
+            title: 'Dashboard',
+            items: [
+              { title: 'List Item' },
+            ],
+          },
+          {
+            action: 'mdi-account',
+            title: 'Administración',
+            active: true,
+            items: [
+              { title: 'Usuarios', route: '/listUsers' },
+              { title: 'Roles', route: '/listRoles' },
+            ],
+          },
+          {
+            action: 'las la-battery-three-quarters',
+            title: 'Configuración',
+            items: [
+              {},
+            ],
+          },
+          {
+            action: 'mdi-clipboard-account',
+            title: 'Desarrollo',
+            items: [
+              {},
+            ],
+          },
+        ],
+      }
+    },
   }
-};
 </script>
-<style>
-</style>
