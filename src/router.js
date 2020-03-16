@@ -63,6 +63,20 @@ export const router = new Router({
       // lazy-loaded
       component: () => import('./views/ListUsers.vue')
 
+    },
+    {
+      path: '/createRole',
+      name: 'createRole',
+      // lazy-loaded
+      component: () => import('./views/CreateRole.vue')
+
+    },
+    {
+      path: '/listRoles',
+      name: 'listRoles',
+      // lazy-loaded
+      component: () => import('./views/ListRoles.vue')
+
     }
   ]
 });

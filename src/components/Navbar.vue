@@ -10,9 +10,10 @@
       <v-list-group
         v-for="item in items"
         :key="item.title"
+        :to="item.route"
         v-model="item.active"
         :prepend-icon="item.action"
-        no-action
+        
       >
         <template v-slot:activator>
           <v-list-item-content>
@@ -47,13 +48,15 @@
           {
             action: 'mdi-home',
             title: 'Dashboard',
+            route: '/home',
             items: [
-              { title: 'List Item' },
+
             ],
           },
           {
             action: 'mdi-account',
             title: 'Administración',
+            route: '',
             active: true,
             items: [
               { title: 'Usuarios', route: '/listUsers' },
@@ -63,6 +66,7 @@
           {
             action: 'las la-battery-three-quarters',
             title: 'Configuración',
+            route: '',
             items: [
               {},
             ],
@@ -70,6 +74,7 @@
           {
             action: 'mdi-clipboard-account',
             title: 'Desarrollo',
+            route: '',
             items: [
               {},
             ],
@@ -79,3 +84,12 @@
     },
   }
 </script>
+<style scoped>
+  .v-list-item__title, .v-icon, .v-icon.v-icon:after, .v-icon.v-icon::before{
+    color: black !important;
+  }
+
+  .mdi-account::before, .mdi-account::after{
+    color: black !important;
+  }
+</style>

@@ -16,8 +16,8 @@
         ></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on" href="/createUser">Crear usuario</v-btn>
+          <template v-slot:activator="{}">
+            <v-btn color="primary" dark class="mb-2" href="/createUser">Crear usuario</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -28,19 +28,22 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                    <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                    <v-text-field v-model="editedItem.apellido" label="Apellido"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.nombreUsuario" label="Nombre de Usuario"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.rol" label="Rol"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -48,8 +51,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -76,156 +79,174 @@
   </v-data-table>
 </template>
 
-<script>
-  export default {
-    name: 'ListUsers',
-    data: () => ({
-      dialog: false,
-      headers: [
-        {
-          text: 'Usuario',
-          align: 'start',
-          sortable: false,
-          value: 'nombreUsuario',
-        },
-        { text: 'Nombre', value: 'nombre' },
-        { text: 'Apellido', value: 'apellido' },
-        { text: 'E-mail', value: 'email' },
-        { text: 'Rol', value: 'rol' },
-        { text: 'Activo', value: 'activo' },
-        { text: 'Acciones', value: 'actions', sortable: false },
-      ],
-      desserts: [],
-      editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+
+  <script>
+import UserService from "../services/user.service";
+export default {
+  name: "ListUsers",
+  data: () => ({
+    dialog: false,
+    headers: [
+      {
+        text: "Usuario",
+        align: "start",
+        sortable: false,
+        value: "nombreUsuario"
+      },
+      { text: "Nombre", value: "nombre" },
+      { text: "Apellido", value: "apellido" },
+      { text: "E-mail", value: "email" },
+      { text: "Rol", value: "rol" },
+      { text: "Activo", value: "activo" },
+      { text: "Acciones", value: "actions", sortable: false }
+    ],
+    desserts: [],
+    editedIndex: -1,
+ editedItem: {
+        nombre: '',
+        apellido: '',
+        email: '',
+        nombreUsuario: '',
+        password: '',
+        rol: ''
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-    }),
+        nombre: '',
+        apellido: '',
+        email: '',
+        nombreUsuario: '',
+        password: '',
+        rol: ''
+      }
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
-    },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    }
+  },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-    },
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
 
-    created () {
-      this.initialize()
-    },
+  created() {
+    this.initialize();
+  },
 
-    methods: {
-      initialize () {
-        this.desserts = [
-          {
-            nombreUsuario: 'acem012',
-            nombre: 'Adriana',
-            apellido: 'Estigarribia',
-            email: 'acem0301@gmail.com',
-            rol: 'Administrador',
-            activo: true,
-          },
-          
-          {
-            nombreUsuario: 'fierrofenix',
-            nombre: 'César',
-            apellido: 'Rolón',
-            email: 'fierrofenix@gmail.com',
-            rol: 'Administrador',
-            activo: true,
-          },
-          
-          {
-            nombreUsuario: 'arias7',
-            nombre: 'Arturo',
-            apellido: 'Sosa',
-            email: 'arturSosa@gmail.com',
-            rol: 'Administrador',
-            activo: true,
-          },
-          
-          {
-            nombreUsuario: 'ragv',
-            nombre: 'Rodrigo',
-            apellido: 'Ruiz',
-            email: 'ragv@gmail.com',
-            rol: 'Administrador',
-            activo: true,
-          },
-          
-          {
-            nombreUsuario: 'peter98',
-            nombre: 'Peter',
-            apellido: 'Jhones',
-            email: 'peterj@gmail.com',
-            rol: 'Líder de Proyecto',
-            activo: true,
-          },
-          
-          {
-            nombreUsuario: 'ark23',
-            nombre: 'John',
-            apellido: 'Terry',
-            email: 'johnt@gmail.com',
-            rol: 'Desarrollador',
-            activo: true,
-          },
-          
-          {
-            nombreUsuario: 'fatima45',
-            nombre: 'Fátima',
-            apellido: 'Benítez',
-            email: 'fabenitez@gmail.com',
-            rol: 'Desarrollador',
-            activo: true,
-          },
-        ]
-      },
+  methods: {
+    initialize() {
+      this.desserts = [
+        {
+          nombreUsuario: "acem012",
+          nombre: "Adriana",
+          apellido: "Estigarribia",
+          email: "acem0301@gmail.com",
+          rol: "Administrador",
+          activo: true
+        },
 
-      editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
+        {
+          nombreUsuario: "fierrofenix",
+          nombre: "César",
+          apellido: "Rolón",
+          email: "fierrofenix@gmail.com",
+          rol: "Administrador",
+          activo: true
+        },
 
-      deleteItem (item) {
-        const index = this.desserts.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
-      },
+        {
+          nombreUsuario: "arias7",
+          nombre: "Arturo",
+          apellido: "Sosa",
+          email: "arturSosa@gmail.com",
+          rol: "Administrador",
+          activo: true
+        },
 
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
+        {
+          nombreUsuario: "ragv",
+          nombre: "Rodrigo",
+          apellido: "Ruiz",
+          email: "ragv@gmail.com",
+          rol: "Administrador",
+          activo: true
+        },
 
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          this.desserts.push(this.editedItem)
+        {
+          nombreUsuario: "peter98",
+          nombre: "Peter",
+          apellido: "Jhones",
+          email: "peterj@gmail.com",
+          rol: "Líder de Proyecto",
+          activo: true
+        },
+
+        {
+          nombreUsuario: "ark23",
+          nombre: "John",
+          apellido: "Terry",
+          email: "johnt@gmail.com",
+          rol: "Desarrollador",
+          activo: true
+        },
+
+        {
+          nombreUsuario: "fatima45",
+          nombre: "Fátima",
+          apellido: "Benítez",
+          email: "fabenitez@gmail.com",
+          rol: "Desarrollador",
+          activo: true
         }
-        this.close()
-      },
+      ];
     },
-  }
 
-  //import NavBar from "./components/Navbar";
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      const index = this.desserts.indexOf(item);
+      confirm("Are you sure you want to delete this item?") &&
+        this.desserts.splice(index, 1);
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      } else {
+        this.desserts.push(this.editedItem);
+      }
+      this.close();
+    }
+  },
+  mounted() {
+    UserService.getAdminBoard().then(
+      response => {
+        this.content = response.data;
+      },
+      error => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+  }
+};
+
+//import NavBar from "./components/Navbar";
 </script>

@@ -50,8 +50,11 @@
               </v-row>
               <v-row>
                   <v-col cols="12" md="6" style="text-align: end;">
-                    <v-btn color="" class="primary" @click="resetValidation">
+                     <v-btn style="float: right;" color="" class="primary" @click="resetValidation">
                           Crear
+                      </v-btn>
+                      <v-btn color="" class="info" href='/home' style="float: left;">
+                          Atrás
                       </v-btn>
                   </v-col>
               </v-row>
