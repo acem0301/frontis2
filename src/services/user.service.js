@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:3000/';
+const API_URL = 'https://backendis2.herokuapp.com/';
 
 class UserService {
   getPublicContent() {
@@ -16,7 +16,7 @@ class UserService {
     return axios.get(API_URL + 'mod', { headers: authHeader() });
   }
 
-  getAdminBoard() {
+  listUsers() {
     return axios.get(API_URL + 'listUsers', { headers: authHeader() });
   }
 }

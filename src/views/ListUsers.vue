@@ -2,13 +2,14 @@
   <v-data-table
     :headers="headers"
     :items="desserts"
-    sort-by="calories"
+    :hola = "desserts"
+    sort-by="desserts.id"
     class="elevation-1"
   >
     <template v-slot:top>
       <NavBar></NavBar>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Lista de Usuarios</v-toolbar-title>
+        <v-toolbar-title>Lista de Usuarios </v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -18,6 +19,7 @@
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{}">
             <v-btn color="primary" dark class="mb-2" href="/createUser">Crear usuario</v-btn>
+            
           </template>
           <v-card>
             <v-card-title>
@@ -28,22 +30,22 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.apellido" label="Apellido"></v-text-field>
+                    <v-text-field v-model="editedItem.lastName" label="Apellido"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nombreUsuario" label="Nombre de Usuario"></v-text-field>
+                    <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.rol" label="Rol"></v-text-field>
+                    <v-text-field v-model="editedItem.role" label="Rol"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -82,33 +84,35 @@
 
   <script>
 import UserService from "../services/user.service";
+import axios from 'axios'
 export default {
   name: "ListUsers",
-  data: () => ({
-    dialog: false,
-    headers: [
-      {
-        text: "Usuario",
-        align: "start",
-        sortable: false,
-        value: "nombreUsuario"
-      },
-      { text: "Nombre", value: "nombre" },
-      { text: "Apellido", value: "apellido" },
-      { text: "E-mail", value: "email" },
-      { text: "Rol", value: "rol" },
-      { text: "Activo", value: "activo" },
-      { text: "Acciones", value: "actions", sortable: false }
-    ],
-    desserts: [],
-    editedIndex: -1,
- editedItem: {
-        nombre: '',
-        apellido: '',
+  data() {
+    return{
+      dialog: false,
+      headers: [
+        {
+          text: "Usuario",
+          align: "start",
+          sortable: false,
+          value: "username"
+        },
+        { text: "Nombre", value: "nombre" },
+        { text: "Apellido", value: "apellido" },
+        { text: "E-mail", value: "email" },
+        { text: "Rol", value: "rol" },
+        { text: "Activo", value: "activo" },
+        { text: "Acciones", value: "actions", sortable: false }
+      ],
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+        name: '',
+        lastName: '',
         email: '',
-        nombreUsuario: '',
+        username: '',
         password: '',
-        rol: ''
+        role: ''
       },
       defaultItem: {
         nombre: '',
@@ -118,7 +122,8 @@ export default {
         password: '',
         rol: ''
       }
-  }),
+    }
+  },
 
   computed: {
     formTitle() {
@@ -137,81 +142,15 @@ export default {
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          nombreUsuario: "acem012",
-          nombre: "Adriana",
-          apellido: "Estigarribia",
-          email: "acem0301@gmail.com",
-          rol: "Administrador",
-          activo: true
-        },
-
-        {
-          nombreUsuario: "fierrofenix",
-          nombre: "César",
-          apellido: "Rolón",
-          email: "fierrofenix@gmail.com",
-          rol: "Administrador",
-          activo: true
-        },
-
-        {
-          nombreUsuario: "arias7",
-          nombre: "Arturo",
-          apellido: "Sosa",
-          email: "arturSosa@gmail.com",
-          rol: "Administrador",
-          activo: true
-        },
-
-        {
-          nombreUsuario: "ragv",
-          nombre: "Rodrigo",
-          apellido: "Ruiz",
-          email: "ragv@gmail.com",
-          rol: "Administrador",
-          activo: true
-        },
-
-        {
-          nombreUsuario: "peter98",
-          nombre: "Peter",
-          apellido: "Jhones",
-          email: "peterj@gmail.com",
-          rol: "Líder de Proyecto",
-          activo: true
-        },
-
-        {
-          nombreUsuario: "ark23",
-          nombre: "John",
-          apellido: "Terry",
-          email: "johnt@gmail.com",
-          rol: "Desarrollador",
-          activo: true
-        },
-
-        {
-          nombreUsuario: "fatima45",
-          nombre: "Fátima",
-          apellido: "Benítez",
-          email: "fabenitez@gmail.com",
-          rol: "Desarrollador",
-          activo: true
-        }
-      ];
-    },
-
+    
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.desserts.find(x => x.id == data.id);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      const index = this.desserts.indexOf(item);
+      const index = this.desserts.find(x => x.id == data.id);
       confirm("Are you sure you want to delete this item?") &&
         this.desserts.splice(index, 1);
     },
@@ -233,20 +172,21 @@ export default {
       this.close();
     }
   },
-  mounted() {
-    UserService.getAdminBoard().then(
+   mounted() {
+    let vue = this;
+    UserService.listUsers().then(
       response => {
-        this.content = response.data;
+        vue.desserts = response.data.userTemp;
+        console.log(vue.desserts);
       },
       error => {
-        this.content =
-          (error.response && error.response.data) ||
+        this.desserts =
+          (error.response && error.response.data.userTemp) ||
           error.message ||
           error.toString();
+          console.log("error");
       }
     );
   }
-};
-
-//import NavBar from "./components/Navbar";
+}
 </script>
