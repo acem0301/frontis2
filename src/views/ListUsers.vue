@@ -2,24 +2,19 @@
   <v-data-table
     :headers="headers"
     :items="desserts"
-    :hola = "desserts"
+    :hola="desserts"
     sort-by="desserts.id"
     class="elevation-1"
   >
     <template v-slot:top>
       <NavBar></NavBar>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Lista de Usuarios </v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+        <v-toolbar-title>Lista de Usuarios</v-toolbar-title>
+        <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{}">
             <v-btn color="primary" dark class="mb-2" href="/createUser">Crear usuario</v-btn>
-            
           </template>
           <v-card>
             <v-card-title>
@@ -61,19 +56,8 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+      <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -84,11 +68,11 @@
 
   <script>
 import UserService from "../services/user.service";
-import axios from 'axios'
+import axios from "axios";
 export default {
   name: "ListUsers",
   data() {
-    return{
+    return {
       dialog: false,
       headers: [
         {
@@ -107,22 +91,22 @@ export default {
       desserts: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        lastName: '',
-        email: '',
-        username: '',
-        password: '',
-        role: ''
+        name: "",
+        lastName: "",
+        email: "",
+        username: "",
+        password: "",
+        role: ""
       },
       defaultItem: {
-        nombre: '',
-        apellido: '',
-        email: '',
-        nombreUsuario: '',
-        password: '',
-        rol: ''
+        nombre: "",
+        apellido: "",
+        email: "",
+        nombreUsuario: "",
+        password: "",
+        rol: ""
       }
-    }
+    };
   },
 
   computed: {
@@ -142,7 +126,6 @@ export default {
   },
 
   methods: {
-    
     editItem(item) {
       this.editedIndex = this.desserts.find(x => x.id == data.id);
       this.editedItem = Object.assign({}, item);
@@ -172,21 +155,19 @@ export default {
       this.close();
     }
   },
-   mounted() {
+  mounted() {
     let vue = this;
     UserService.listUsers().then(
       response => {
-        vue.desserts = response.data.userTemp;
-        console.log(vue.desserts);
+        vue.desserts = response.data;
       },
       error => {
         this.desserts =
-          (error.response && error.response.data.userTemp) ||
+          (error.response && error.response.data) ||
           error.message ||
           error.toString();
-          console.log("error");
       }
     );
   }
-}
+};
 </script>
