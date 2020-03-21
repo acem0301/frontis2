@@ -2,7 +2,8 @@
   <v-data-table
     :headers="headers"
     :items="proyectos"
-    sort-by="calories"
+    :estados = "estados"
+    sort-by=""
     class="elevation-1"
   >
     <template v-slot:top>
@@ -31,11 +32,12 @@
                   </v-col>
                    <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="editedItem.estado"
-                      :items="items"
-                      :menu-props="{ maxHeight: '400' }"
+                      v-model="estados"
+                      :estados="estados"
                       label="Estado"
-                      persistent-hint
+                      item-text="descripcion"
+                      hide-details
+                      single-line
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -74,6 +76,8 @@
 
 <script>
 import ProjectService from '../services/project.service'
+import OthersServices from '../services/other.services'
+
   export default {
     data: () => ({
       dialog: false,
@@ -92,6 +96,7 @@ import ProjectService from '../services/project.service'
         { text: 'Acciones', value: 'actions', sortable: false },
       ],
       proyectos: [],
+      estados: [],
       editedIndex: -1,
       editedItem: {
         nombre: '',
@@ -149,19 +154,39 @@ import ProjectService from '../services/project.service'
         }
         this.close()
       },
+
+      getProyectos() {
+        ProjectService.listProjects().then(
+            response => {
+              this.proyectos = response.data;
+            },
+            error => {
+              this.proyectos =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+      },
+
+      getEstados() {
+        let table_name = Proyecto;
+        OthersServices.listStates(table_name).then(
+            response => {
+              this.estados = response.data;
+            },
+            error => {
+              this.estados =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+      },
     },
      mounted() {
-        ProjectService.listProjects().then(
-          response => {
-            this.proyectos = response.data;
-          },
-          error => {
-            this.proyectos =
-              (error.response && error.response.data) ||
-              error.message ||
-              error.toString();
-          }
-        );
-  }
+        this.getProyectos();
+        this.getEstados();
+    }
   }
 </script>
