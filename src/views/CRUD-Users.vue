@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
+    :items="items"
     :hola="desserts"
     sort-by="desserts.id"
     class="elevation-1"
@@ -64,8 +64,8 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-      <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+      <v-icon small class="mr-2" @click="updateUsuario(item)">mdi-pencil</v-icon>
+      <v-icon small @click="eliminar">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -103,6 +103,7 @@ export default {
       items: [],
       editedIndex: -1,
       editedItem: {
+        id: "",
         nombre: "",
         apellido: "",
         email: "",
@@ -127,22 +128,29 @@ export default {
     }
   },
 
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "Nuevo ítem" : "Editar ítem";
+    }
+  },
   created() {
     this.initialize();
   },
 
   methods: {
     editItem(item) {
-      this.editedIndex = this.desserts.find(x => x.id == data.id);
+      console.log(this.user.id);
+      console.log(this.items);
+      this.editedIndex = this.items.find(x => x.id == this.user.id);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      const index = this.desserts.find(x => x.id == data.id);
-      confirm("Are you sure you want to delete this item?") &&
-        this.desserts.splice(index, 1);
-    },
+    // deleteItem(item) {
+    //   const index = this.desserts.find(x => x.id == data.id);
+    //   confirm("Are you sure you want to delete this item?") &&
+    //     this.desserts.splice(index, 1);
+    // },
 
     close() {
       this.dialog = false;
@@ -163,10 +171,10 @@ export default {
     getUsuarios() {
       UserService.listUsers().then(
         response => {
-          this.desserts = response.data;
+          this.items = response.data;
         },
         error => {
-          this.desserts =
+          this.items =
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
@@ -188,12 +196,29 @@ export default {
     },
     crearUsuario() {
       UserService.createUser(this.user);
+    },
+
+    updateUsuario(item) {
+      //this.editedIndex = this.items.find(x => x.id == item.id);
+      //console.log(this.editedIndex)
+      //console.log(item)
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+      //console.log(this.items);
+      //UserService.updateUser(item);
+    },
+
+    eliminar() {
+      UserService.deleteUser(7);
     }
   },
   mounted() {
     this.getRoles();
     this.getUsuarios();
     this.crearUsuario();
+    this.eliminar();
+    //this.updateUsuario(item);
   }
 };
 </script>

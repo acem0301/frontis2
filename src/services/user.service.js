@@ -26,6 +26,33 @@ class UserService {
     });
   }
 
+  deleteUser(id) {
+    return axios.delete(API_URL + 'deleteUser/' + id, {
+
+    }).then(response => {
+      return response.data
+    })
+  }
+
+  updateUser(user) {
+    return axios
+      .put(API_URL + 'updateUser/' + user.id, {
+        nombre: user.nombre,
+        apellido: user.apellido,
+        email: user.email,
+        rol_id: user.rol_id,
+        username: user.username,
+        password: user.password
+      })
+      .then(response => {
+        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
+        // if (response.data.accessToken) {
+        //   localStorage.setItem('user', JSON.stringify(response.data));
+        // }
+        return response.data;
+      });
+  }
+
   listUsers() {
     return axios.get(API_URL + 'listUsers', {
       headers: authHeader()
