@@ -9,7 +9,22 @@ class RolService {
   }
 
   listRoles() {
-    return axios.get(API_URL + 'listRoles', { headers: authHeader() });
+    return axios.get(API_URL + 'listRoles', {
+      headers: authHeader()
+    });
+  }
+  createRol(rol) {
+    return axios
+      .post(API_URL + 'createRol', {
+        descripcion: user.descripcion
+      })
+      .then(response => {
+        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
+        // if (response.data.accessToken) {
+        //   localStorage.setItem('user', JSON.stringify(response.data));
+        // }
+        return response.data;
+      });
   }
 }
 

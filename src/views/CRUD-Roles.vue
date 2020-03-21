@@ -19,7 +19,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
+                    <v-text-field v-model="rol.descripcion" label="Descripción"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
@@ -37,7 +37,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="crearRol">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -55,12 +55,14 @@
 
 <script>
 import RolService from "../services/rol.service";
+import Rol from "../models/rol";
 import axios from "axios";
 export default {
   name: "ListRoles",
   data() {
     return {
       dialog: false,
+      rol: new Rol(),
       headers: [
         {
           text: "Rol",
@@ -135,6 +137,9 @@ export default {
         this.roles.push(this.editedItem);
       }
       this.close();
+    },
+    crearRol() {
+      RolService.createRol(this.rol);
     }
   },
   mounted() {
@@ -150,6 +155,7 @@ export default {
           error.toString();
       }
     );
+    this.crearRol();
   }
 };
 </script>
