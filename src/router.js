@@ -73,9 +73,16 @@ export const router = new Router({
     },
     {
       path: '/listRoles',
+      
       name: 'listRoles',
       // lazy-loaded
       component: () => import('./views/ListRoles.vue')
+
+    },
+    {
+      path: '/listItems',
+      name: 'listItems',
+      component: () => import('./views/CRUD-Item.vue')
 
     }
   ]

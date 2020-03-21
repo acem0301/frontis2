@@ -76,7 +76,8 @@
             title: 'Desarrollo',
             route: '',
             items: [
-              {},
+              { title: 'Tareas', route: '/listItems' },
+              { title: 'Proyectos', route: '/listProjects' },
             ],
           },
         ],
