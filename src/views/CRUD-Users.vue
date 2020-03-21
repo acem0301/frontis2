@@ -25,26 +25,27 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
+                    <v-text-field v-model="user.nombre" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.lastName" label="Apellido"></v-text-field>
+                    <v-text-field v-model="user.apellido" label="Apellido"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                    <v-text-field v-model="user.email" label="E-mail"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
+                    <v-text-field v-model="user.username" label="Nombre de Usuario"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
+                    <v-text-field v-model="user.password" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="roles"
+                      v-model="user.rol_id"
                       :items="items"
                       label="Rol"
                       item-text="descripcion"
+                      item-value="id"
                       hide-details
                       single-line
                     ></v-select>
@@ -56,7 +57,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="crearUsuario">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -76,12 +77,14 @@
   <script>
 import UserService from "../services/user.service";
 import RolService from "../services/rol.service";
+import User from "../models/user";
 import axios from "axios";
 export default {
   name: "ListUsers",
   data() {
     return {
       dialog: false,
+      user: new User(),
       headers: [
         {
           text: "Usuario",
@@ -100,18 +103,18 @@ export default {
       items: [],
       editedIndex: -1,
       editedItem: {
-        name: "",
-        lastName: "",
+        nombre: "",
+        apellido: "",
         email: "",
         username: "",
         password: "",
-        role: ""
+        rol_id: ""
       },
       defaultItem: {
         nombre: "",
         apellido: "",
         email: "",
-        nombreUsuario: "",
+        username: "",
         password: "",
         rol: ""
       }
@@ -182,11 +185,15 @@ export default {
             error.toString();
         }
       );
+    },
+    crearUsuario() {
+      UserService.createUser(this.user);
     }
   },
   mounted() {
     this.getRoles();
     this.getUsuarios();
+    this.crearUsuario();
   }
 };
 </script>
