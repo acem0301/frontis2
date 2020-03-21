@@ -40,7 +40,14 @@
                     <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.role" label="Rol"></v-text-field>
+                    <v-select
+                      v-model="roles"
+                      :items="items"
+                      label="Rol"
+                      item-text="descripcion"
+                      hide-details
+                      single-line
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-container>
@@ -68,6 +75,7 @@
 
   <script>
 import UserService from "../services/user.service";
+import RolService from "../services/rol.service";
 import axios from "axios";
 export default {
   name: "ListUsers",
@@ -84,11 +92,12 @@ export default {
         { text: "Nombre", value: "nombre" },
         { text: "Apellido", value: "apellido" },
         { text: "E-mail", value: "email" },
-        { text: "Rol", value: "rol" },
+        { text: "Rol", value: "descripcion" },
         { text: "Activo", value: "activo" },
         { text: "Acciones", value: "actions", sortable: false }
       ],
       desserts: [],
+      items: [],
       editedIndex: -1,
       editedItem: {
         name: "",
@@ -107,12 +116,6 @@ export default {
         rol: ""
       }
     };
-  },
-
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Nuevo Usuario" : "Editar Usuario";
-    }
   },
 
   watch: {
@@ -153,21 +156,37 @@ export default {
         this.desserts.push(this.editedItem);
       }
       this.close();
+    },
+    getUsuarios() {
+      UserService.listUsers().then(
+        response => {
+          this.desserts = response.data;
+        },
+        error => {
+          this.desserts =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+    getRoles() {
+      RolService.listRoles().then(
+        response => {
+          this.items = response.data;
+        },
+        error => {
+          this.items =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
     }
   },
   mounted() {
-    let vue = this;
-    UserService.listUsers().then(
-      response => {
-        vue.desserts = response.data;
-      },
-      error => {
-        this.desserts =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
+    this.getRoles();
+    this.getUsuarios();
   }
 };
 </script>
