@@ -1,19 +1,19 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="tareas"
+    :items="proyectos"
     sort-by="calories"
     class="elevation-1"
   >
     <template v-slot:top>
       <NavBar></NavBar>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Lista de ítems</v-toolbar-title>
+        <v-toolbar-title>Lista de proyectos</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo Item</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo Proyecto</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -24,23 +24,17 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nombre_item" label="Descripción"></v-text-field>
+                    <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.observacion" label="Observación"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.estado" label="Estado"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nombre_prioridad" label="Prioridad"></v-text-field>
+                    <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
                   </v-col>
                    <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="editedItem.fase"
+                      v-model="editedItem.estado"
                       :items="items"
                       :menu-props="{ maxHeight: '400' }"
-                      label="Fase"
+                      label="Estado"
                       persistent-hint
                     ></v-select>
                   </v-col>
@@ -79,45 +73,41 @@
 </template>
 
 <script>
-import ItemService from '../services/item.service'
+import ProjectService from '../services/project.service'
   export default {
     data: () => ({
       dialog: false,
       headers: [
         {
-          text: 'Id ítem',
+          text: 'Id proyecto',
           align: 'start',
           sortable: false,
-          value: 'item_id',
+          value: 'id',
         },
-        { text: 'Prioridad', value: 'nombre_prioridad' },
+        { text: 'Nombre', value: 'nombre' },
+        { text: 'Descripción', value: 'descripcion' },
+        { text: 'Fecha inicio', value: 'fecha_inicio' },
+        { text: 'Fecha fin', value: 'fecha_fin' },
         { text: 'Estado', value: 'estado' },
-        { text: 'Descripción', value: 'nombre_item' },
-        { text: 'Observación', value: 'observacion' },
-        { text: 'Fase', value: 'fase_nombre' },
         { text: 'Acciones', value: 'actions', sortable: false },
       ],
-      tareas: [],
+      proyectos: [],
       editedIndex: -1,
       editedItem: {
-        nombre_prioridad: '',
-        estado: '',
-        nombre_item: '',
-        observacion: '',
-        fase: []
+        nombre: '',
+        descripcion: '',
+        estado: []
       },
       defaultItem: {
-        nombre_prioridad: '',
-        estado: '',
-        nombre_item: '',
-        observacion: '',
-        fase: []
+       nombre: '',
+        descripcion: '',
+        estado: []
       },
     }),
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Nuevo ítem' : 'Editar ítem'
+        return this.editedIndex === -1 ? 'Nuevo proyecto' : 'Editar proyecto'
       },
     },
 
@@ -133,14 +123,14 @@ import ItemService from '../services/item.service'
 
     methods: {
       editItem (item) {
-        this.editedIndex = this.tareas.indexOf(item)
+        this.editedIndex = this.proyectos.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-        const index = this.tareas.indexOf(item)
-        confirm('¿Seguro que desea borrar este ítem?') && this.tareas.splice(index, 1)
+        const index = this.proyectos.indexOf(item)
+        confirm('¿Seguro que desea borrar este proyecto?') && this.proyectos.splice(index, 1)
       },
 
       close () {
@@ -153,20 +143,20 @@ import ItemService from '../services/item.service'
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.tareas[this.editedIndex], this.editedItem)
+          Object.assign(this.proyectos[this.editedIndex], this.editedItem)
         } else {
-          this.tareas.push(this.editedItem)
+          this.proyectos.push(this.editedItem)
         }
         this.close()
       },
     },
      mounted() {
-        ItemService.listItems().then(
+        ProjectService.listProjects().then(
           response => {
-            this.tareas = response.data;
+            this.proyectos = response.data;
           },
           error => {
-            this.tareas =
+            this.proyectos =
               (error.response && error.response.data) ||
               error.message ||
               error.toString();

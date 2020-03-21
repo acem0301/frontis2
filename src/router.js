@@ -70,6 +70,12 @@ export const router = new Router({
       name: 'listItems',
       component: () => import('./views/CRUD-Item.vue')
 
+    },
+    {
+      path: '/listProjects',
+      name: 'listProjects',
+      component: () => import('./views/Project.vue')
+
     }
   ]
 });
