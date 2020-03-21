@@ -1,14 +1,20 @@
 <template>
-  <v-data-table :headers="headers" :items="roles" sort-by="calories" class="elevation-1">
+  <v-data-table
+    :headers="headers"
+    :items="desserts"
+    :hola="desserts"
+    sort-by="desserts.id"
+    class="elevation-1"
+  >
     <template v-slot:top>
       <NavBar></NavBar>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Lista de Roles</v-toolbar-title>
+        <v-toolbar-title>Lista de Usuarios</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ }">
-            <v-btn color="primary" dark class="mb-2" href="/createRole">Crear rol</v-btn>
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo usuario</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -19,16 +25,22 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.permisos"
-                      :items="items"
-                      :menu-props="{ maxHeight: '400' }"
-                      label="Permisos"
-                      persistent-hint
-                    ></v-select>
+                    <v-text-field v-model="editedItem.lastName" label="Apellido"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.role" label="Rol"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -53,47 +65,53 @@
   </v-data-table>
 </template>
 
-<script>
-import RolService from "../services/rol.service";
+
+  <script>
+import UserService from "../services/user.service";
 import axios from "axios";
 export default {
-  name: "ListRoles",
+  name: "ListUsers",
   data() {
     return {
       dialog: false,
       headers: [
         {
-          text: "Rol",
+          text: "Usuario",
           align: "start",
           sortable: false,
-          value: "descripcion"
+          value: "username"
         },
+        { text: "Nombre", value: "nombre" },
+        { text: "Apellido", value: "apellido" },
+        { text: "E-mail", value: "email" },
+        { text: "Rol", value: "rol" },
+        { text: "Activo", value: "activo" },
         { text: "Acciones", value: "actions", sortable: false }
       ],
-      roles: [],
+      desserts: [],
       editedIndex: -1,
       editedItem: {
-        descripcion: "",
-        permisos: []
+        name: "",
+        lastName: "",
+        email: "",
+        username: "",
+        password: "",
+        role: ""
       },
       defaultItem: {
-        descripcion: "",
-        permisos: []
-      },
-      items: [
-        "Crear usuario",
-        "Editar usuario",
-        "Eliminar usuario",
-        "Crear rol",
-        "Editar rol",
-        "Eliminar rol"
-      ]
+        nombre: "",
+        apellido: "",
+        email: "",
+        nombreUsuario: "",
+        password: "",
+        rol: ""
+      }
     };
   },
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Nuevo Rol" : "Editar Rol";
+      return this.editedIndex === -1 ? "Nuevo Usuario" : "Editar Usuario";
     }
   },
 
@@ -109,15 +127,15 @@ export default {
 
   methods: {
     editItem(item) {
-      this.editedIndex = this.roles.indexOf(item);
+      this.editedIndex = this.desserts.find(x => x.id == data.id);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      const index = this.roles.indexOf(item);
+      const index = this.desserts.find(x => x.id == data.id);
       confirm("Are you sure you want to delete this item?") &&
-        this.roles.splice(index, 1);
+        this.desserts.splice(index, 1);
     },
 
     close() {
@@ -130,18 +148,18 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.roles[this.editedIndex], this.editedItem);
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
       } else {
-        this.roles.push(this.editedItem);
+        this.desserts.push(this.editedItem);
       }
       this.close();
     }
   },
   mounted() {
     let vue = this;
-    RolService.listRoles().then(
+    UserService.listUsers().then(
       response => {
-        vue.roles = response.data;
+        vue.desserts = response.data;
       },
       error => {
         this.desserts =

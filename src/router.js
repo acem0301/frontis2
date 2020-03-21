@@ -51,24 +51,10 @@ export const router = new Router({
       component: () => import('./views/BoardUser.vue')
     },
     {
-      path: '/createUser',
-      name: 'createUser',
-      // lazy-loaded
-      component: () => import('./views/CreateUser.vue')
-
-    },
-    {
       path: '/listUsers',
       name: 'listUsers',
       // lazy-loaded
-      component: () => import('./views/ListUsers.vue')
-
-    },
-    {
-      path: '/createRole',
-      name: 'createRole',
-      // lazy-loaded
-      component: () => import('./views/CreateRole.vue')
+      component: () => import('./views/CRUD-Users.vue')
 
     },
     {
@@ -76,7 +62,7 @@ export const router = new Router({
       
       name: 'listRoles',
       // lazy-loaded
-      component: () => import('./views/ListRoles.vue')
+      component: () => import('./views/CRUD-Roles.vue')
 
     },
     {
