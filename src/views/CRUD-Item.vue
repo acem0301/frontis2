@@ -3,7 +3,7 @@
   <v-data-table
     :headers="headers"
     :items="tareas"
-    :states = "states"
+    :states="states"
     sort-by="calories"
     class="elevation-1"
   >
@@ -45,7 +45,7 @@
                       single-line
                     ></v-select>
                   </v-col>
-                   <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="item.estado_id"
                       :items="states"
@@ -81,19 +81,8 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+      <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Resetear</v-btn>
@@ -102,27 +91,27 @@
 </template>
 
 <script>
-import ItemService from '../services/item.service'
-import OtherServices from '../services/other.services' 
+import ItemService from "../services/item.service";
+import OtherServices from "../services/other.services";
 import Item from "../models/item";
-  export default {
-    
-    data: () => ({
+export default {
+  data() {
+    return {
       dialog: false,
       item: new Item(),
       headers: [
         {
-          text: 'Id ítem',
-          align: 'start',
+          text: "Id ítem",
+          align: "start",
           sortable: false,
-          value: 'item_id',
+          value: "item_id"
         },
-        { text: 'Prioridad', value: 'nombre_prioridad' },
-        { text: 'Estado', value: 'estado' },
-        { text: 'Descripción', value: 'descripcion' },
-        { text: 'Observación', value: 'observacion' },
-        { text: 'Fase', value: 'fase_nombre' },
-        { text: 'Acciones', value: 'actions', sortable: false },
+        { text: "Prioridad", value: "nombre_prioridad" },
+        { text: "Estado", value: "estado" },
+        { text: "Descripción", value: "descripcion" },
+        { text: "Observación", value: "observacion" },
+        { text: "Fase", value: "fase_nombre" },
+        { text: "Acciones", value: "actions", sortable: false }
       ],
       tareas: [],
       states: [],
@@ -130,125 +119,127 @@ import Item from "../models/item";
       phases: [],
       editedIndex: -1,
       editedItem: {
-        nombre_prioridad: '',
-        estado: '',
-        nombre_item: '',
-        observacion: '',
+        nombre_prioridad: "",
+        estado: "",
+        nombre_item: "",
+        observacion: "",
         fase: []
       },
       defaultItem: {
-        nombre_prioridad: '',
-        estado: '',
-        nombre_item: '',
-        observacion: '',
+        nombre_prioridad: "",
+        estado: "",
+        nombre_item: "",
+        observacion: "",
         fase: []
-      },
-    }),
-
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Nuevo ítem' : 'Editar ítem'
-      },
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-    },
-
-    created () {
-      this.initialize()
-    },
-
-    methods: {
-      editItem (item) {
-        this.editedIndex = this.tareas.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        const index = this.tareas.indexOf(item)
-        confirm('¿Seguro que desea borrar este ítem?') && this.tareas.splice(index, 1)
-      },
-
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-
-      getItems() {
-        ItemService.listItems().then(
-            response => {
-              this.tareas = response.data;
-            },
-            error => {
-              this.tareas =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
-            }
-          );
-      },
-
-      getStates() {
-        let table_name = "Item";
-        OtherServices.listStates(table_name).then(
-            response => {
-              this.states = response.data;
-              console.log(this.states);
-            },
-            error => {
-              this.states =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
-            }
-          );
-      },
-
-       getPriorities() {
-        OtherServices.listPriorities().then(
-            response => {
-              this.priorities = response.data;
-            },
-            error => {
-              this.priorities =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
-            }
-          );
-      },
-
-      getPhases() {
-        OtherServices.listPhases().then(
-            response => {
-              this.phases = response.data;
-            },
-            error => {
-              this.phases =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
-            }
-          );
-      },
-
-      crearItem() {
-        ItemService.createItem(this.item);
       }
+    };
+  },
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "Nuevo ítem" : "Editar ítem";
+    }
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    editItem(item) {
+      this.editedIndex = this.tareas.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
 
-    mounted() {
-          this.getItems();
-          this.getStates();
-          this.getPriorities();
-          this.getPhases();
-      }
+    deleteItem(item) {
+      const index = this.tareas.indexOf(item);
+      confirm("¿Seguro que desea borrar este ítem?") &&
+        this.tareas.splice(index, 1);
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    getItems() {
+      ItemService.listItems().then(
+        response => {
+          this.tareas = response.data;
+        },
+        error => {
+          this.tareas =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+
+    getStates() {
+      let table_name = "Item";
+      OtherServices.listStates(table_name).then(
+        response => {
+          this.states = response.data;
+          console.log(this.states);
+        },
+        error => {
+          this.states =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+
+    getPriorities() {
+      OtherServices.listPriorities().then(
+        response => {
+          this.priorities = response.data;
+        },
+        error => {
+          this.priorities =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+
+    getPhases() {
+      OtherServices.listPhases().then(
+        response => {
+          this.phases = response.data;
+        },
+        error => {
+          this.phases =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+
+    crearItem() {
+      ItemService.createItem(this.item);
+    }
+  },
+
+  mounted() {
+    this.getItems();
+    this.getStates();
+    this.getPriorities();
+    this.getPhases();
   }
+};
 </script>
