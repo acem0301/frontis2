@@ -48,7 +48,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -56,7 +56,7 @@
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-      <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+      <v-icon small @click="eliminar(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Resetear</v-btn>
@@ -125,10 +125,12 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      const index = this.proyectos.indexOf(item);
-      confirm("¿Seguro que desea borrar este proyecto?") &&
-        this.proyectos.splice(index, 1);
+    eliminar(item) {
+      confirm("Are you sure you want to delete this item?") &&
+        console.log(this.editedItem);
+      this.editedIndex = this.proyectos.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      ProjectService.deleteProject(this.editedItem.id);
     },
 
     close() {
@@ -144,6 +146,15 @@ export default {
         Object.assign(this.proyectos[this.editedIndex], this.editedItem);
       } else {
         this.proyectos.push(this.editedItem);
+      }
+      this.close();
+    },
+
+    guardar() {
+      if (this.editedIndex > -1) {
+        ProjectService.updateProject(this.editedItem);
+      } else {
+        ProjectService.createProject(this.editedItem);
       }
       this.close();
     },

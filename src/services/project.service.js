@@ -6,20 +6,51 @@ const API_URL = 'http://localhost:3000/';
 class ProjectService {
 
   listProjects() {
-    return axios.get(API_URL + 'listProjects', { headers: authHeader() });
+    return axios.get(API_URL + 'listProjects', {
+      headers: authHeader()
+    });
   }
 
-  createProject() {
-    return axios.post(API_URL + 'createProject', { headers: authHeader() });
+  createProject(project) {
+    return axios
+      .post(API_URL + 'createProject', {
+        nombre: project.nombre,
+        descripcion: project.descripcion,
+        estado_id: project.estado_id
+      })
+      .then(response => {
+        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
+        // if (response.data.accessToken) {
+        //   localStorage.setItem('user', JSON.stringify(response.data));
+        // }
+        return response.data;
+      });
   }
 
-  editProject() {
-    return axios.post(API_URL + 'editProject', { headers: authHeader() });
+  deleteProject(id) {
+    return axios.delete(API_URL + 'deleteProject/' + id, {
+
+    }).then(response => {
+      return response.data
+    })
   }
-  
-  deleteProject() {
-    return axios.post(API_URL + 'deleteProject', { headers: authHeader() });
+
+  updateProject(project) {
+    return axios
+      .put(API_URL + 'updateProject/' + project.id, {
+        nombre: project.nombre,
+        descripcion: project.descripcion,
+        estado_id: project.estado_id
+      })
+      .then(response => {
+        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
+        // if (response.data.accessToken) {
+        //   localStorage.setItem('user', JSON.stringify(response.data));
+        // }
+        return response.data;
+      });
   }
+
 
 }
 
