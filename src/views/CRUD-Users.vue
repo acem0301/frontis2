@@ -78,7 +78,6 @@
 import UserService from "../services/user.service";
 import RolService from "../services/rol.service";
 import User from "../models/user";
-import axios from "axios";
 export default {
   name: "ListUsers",
   data() {

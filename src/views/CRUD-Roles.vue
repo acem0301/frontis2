@@ -19,7 +19,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="rol.descripcion" label="Descripción"></v-text-field>
+                    <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
@@ -37,15 +37,15 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="crearRol">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-      <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+      <v-icon small class="mr-2" @click="updateRol(item)">mdi-pencil</v-icon>
+      <v-icon small @click="deleteRol(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -130,16 +130,26 @@ export default {
       }, 300);
     },
 
-    save() {
+    guardar() {
       if (this.editedIndex > -1) {
-        Object.assign(this.roles[this.editedIndex], this.editedItem);
+        RolService.updateRol(this.editedItem);
       } else {
-        this.roles.push(this.editedItem);
+        RolService.createRol(this.editedItem);
       }
       this.close();
     },
-    crearRol() {
-      RolService.createRol(this.rol);
+    updateRol(item) {
+      this.editedIndex = this.roles.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteRol(item) {
+      confirm("Are you sure you want to delete this item?") &&
+        console.log(this.editedItem);
+      this.editedIndex = this.roles.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      RolService.deleteRol(this.editedItem.id);
     }
   },
   mounted() {
