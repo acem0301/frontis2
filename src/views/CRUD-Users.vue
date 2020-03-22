@@ -187,15 +187,18 @@ export default {
       );
     },
     crearUsuario() {
-      UserService.createUser(this.user);
+      if (this.editedIndex > -1) {
+        UserService.updateUser(this.editedItem);
+      } else {
+        UserService.createUser(this.editedItem);
+      }
+      this.close();
     },
 
     updateUsuario(item) {
-      this.editedIndex = this.items.indexOf(item)
+      this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
-      //console.log(this.items);
-      //UserService.updateUser(item);
     },
 
     eliminar() {
@@ -207,7 +210,6 @@ export default {
     this.getUsuarios();
     this.crearUsuario();
     this.eliminar();
-    //this.updateUsuario(item);
   }
 };
 </script>
