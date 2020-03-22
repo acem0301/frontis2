@@ -25,23 +25,23 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="user.nombre" label="Nombre"></v-text-field>
+                    <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="user.apellido" label="Apellido"></v-text-field>
+                    <v-text-field v-model="editedItem.apellido" label="Apellido"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="user.email" label="E-mail"></v-text-field>
+                    <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="user.username" label="Nombre de Usuario"></v-text-field>
+                    <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="user.password" label="Contraseña"></v-text-field>
+                    <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="user.rol_id"
+                      v-model="editedItem.rol_id"
                       :items="items"
                       label="Rol"
                       item-text="descripcion"
@@ -138,14 +138,6 @@ export default {
   },
 
   methods: {
-    editItem(item) {
-      console.log(this.user.id);
-      console.log(this.items);
-      this.editedIndex = this.items.find(x => x.id == this.user.id);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-
     // deleteItem(item) {
     //   const index = this.desserts.find(x => x.id == data.id);
     //   confirm("Are you sure you want to delete this item?") &&
@@ -199,10 +191,7 @@ export default {
     },
 
     updateUsuario(item) {
-      //this.editedIndex = this.items.find(x => x.id == item.id);
-      //console.log(this.editedIndex)
-      //console.log(item)
-      this.editedIndex = this.items.indexOf(item);
+      this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
       //console.log(this.items);
