@@ -26,17 +26,17 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="item.nombre_item" label="Nombre"></v-text-field>
+                    <v-text-field v-model="editedItem.id" label="Id"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="item.descripcion" label="Descripción"></v-text-field>
+                    <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="item.observacion" label="Observación"></v-text-field>
+                    <v-text-field v-model="editedItem.observacion" label="Observación"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="item.prioridad_id"
+                      v-model="editedItem.prioridad_id"
                       :items="priorities"
                       label="Prioridad"
                       item-text="descripcion"
@@ -47,7 +47,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="item.estado_id"
+                      v-model="editedItem.estado_id"
                       :items="states"
                       label="Estado"
                       item-text="descripcion"
@@ -58,7 +58,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="item.fase_id"
+                      v-model="editedItem.fase_id"
                       :items="phases"
                       label="Fase"
                       item-text="nombre"
@@ -74,7 +74,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="crearItem">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -84,9 +84,9 @@
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
       <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
     </template>
-    <template v-slot:no-data>
+    <!-- <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Resetear</v-btn>
-    </template>
+    </template>-->
   </v-data-table>
 </template>
 
@@ -104,7 +104,7 @@ export default {
           text: "Id ítem",
           align: "start",
           sortable: false,
-          value: "item_id"
+          value: "id"
         },
         { text: "Prioridad", value: "nombre_prioridad" },
         { text: "Estado", value: "estado" },
@@ -119,18 +119,26 @@ export default {
       phases: [],
       editedIndex: -1,
       editedItem: {
-        nombre_prioridad: "",
-        estado: "",
-        nombre_item: "",
+        id: "",
+        version: "",
+        prioridad_id: "",
+        estado_id: "",
+        descripcion: "",
         observacion: "",
-        fase: []
+        fase_id: "",
+        id_tarea_padre: "",
+        es_padre: false
       },
       defaultItem: {
-        nombre_prioridad: "",
-        estado: "",
-        nombre_item: "",
+        id: "",
+        version: "",
+        prioridad_id: "",
+        estado_id: "",
+        descripcion: "",
         observacion: "",
-        fase: []
+        fase_id: "",
+        id_tarea_padre: "",
+        es_padre: false
       }
     };
   },
@@ -145,10 +153,6 @@ export default {
     dialog(val) {
       val || this.close();
     }
-  },
-
-  created() {
-    this.initialize();
   },
 
   methods: {
@@ -229,9 +233,14 @@ export default {
         }
       );
     },
-
-    crearItem() {
-      ItemService.createItem(this.item);
+    guardar() {
+      if (this.editedIndex > -1) {
+        ItemService.updateItem(this.editedItem);
+      } else {
+        console.log(this.editedItem);
+        ItemService.createItem(this.editedItem);
+      }
+      this.close();
     }
   },
 

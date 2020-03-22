@@ -6,27 +6,53 @@ const API_URL = 'http://localhost:3000/';
 class ItemService {
 
   listItems() {
-    return axios.get(API_URL + 'listItems', { headers: authHeader() });
+    return axios.get(API_URL + 'listItems', {
+      headers: authHeader()
+    });
   }
 
   createItem(item) {
     return axios
-        .post(API_URL + 'createItem', { headers: authHeader() }, {
-            estado_id: item.estado_id,
-            descripcion: item.descripcion,
-            observacion: item.observacion,
-            prioridad_id: item.prioridad_id,
-            fase_id: item.fase_id
-        });
+      .post(API_URL + 'createItem', {
+        version: '1',
+        prioridad_id: item.prioridad_id,
+        estado_id: item.estado_id,
+        descripcion: item.descripcion,
+        observacion: item.observacion,
+        fase_id: item.fase_id,
+        id_tarea_padre: null,
+        es_padre: false
+      });
   }
-  
 
-  editItem() {
-    return axios.post(API_URL + 'editItem', { headers: authHeader() });
+
+  deleteItem(id) {
+    return axios.delete(API_URL + 'deleteItem/' + id, {
+
+    }).then(response => {
+      return response.data
+    })
   }
-  
-  deleteItem() {
-    return axios.post(API_URL + 'deleteItem', { headers: authHeader() });
+
+  updateItem(item) {
+    return axios
+      .put(API_URL + 'updateItem/' + item.id, {
+        version: '1',
+        prioridad_id: item.prioridad_id,
+        estado_id: item.estado_id,
+        descripcion: item.descripcion,
+        observacion: item.observacion,
+        fase_id: item.fase_id,
+        id_tarea_padre: item.id_tarea_padre,
+        es_padre: false
+      })
+      .then(response => {
+        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
+        // if (response.data.accessToken) {
+        //   localStorage.setItem('user', JSON.stringify(response.data));
+        // }
+        return response.data;
+      });
   }
 
 }
