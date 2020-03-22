@@ -9,9 +9,17 @@ class ItemService {
     return axios.get(API_URL + 'listItems', { headers: authHeader() });
   }
 
-  createItem() {
-    return axios.post(API_URL + 'createItem', { headers: authHeader() });
+  createItem(item) {
+    return axios
+        .post(API_URL + 'createItem', { headers: authHeader() }, {
+            estado_id: item.estado_id,
+            descripcion: item.descripcion,
+            observacion: item.observacion,
+            prioridad_id: item.prioridad_id,
+            fase_id: item.fase_id
+        });
   }
+  
 
   editItem() {
     return axios.post(API_URL + 'editItem', { headers: authHeader() });
