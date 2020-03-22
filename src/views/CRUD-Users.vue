@@ -57,7 +57,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="crearUsuario">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -65,7 +65,7 @@
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon small class="mr-2" @click="updateUsuario(item)">mdi-pencil</v-icon>
-      <v-icon small @click="eliminar">mdi-delete</v-icon>
+      <v-icon small @click="eliminar(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -138,12 +138,6 @@ export default {
   },
 
   methods: {
-    // deleteItem(item) {
-    //   const index = this.desserts.find(x => x.id == data.id);
-    //   confirm("Are you sure you want to delete this item?") &&
-    //     this.desserts.splice(index, 1);
-    // },
-
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -186,7 +180,7 @@ export default {
         }
       );
     },
-    crearUsuario() {
+    guardar() {
       if (this.editedIndex > -1) {
         UserService.updateUser(this.editedItem);
       } else {
@@ -201,15 +195,17 @@ export default {
       this.dialog = true;
     },
 
-    eliminar() {
-      UserService.deleteUser(7);
+    eliminar(item) {
+      confirm("Are you sure you want to delete this item?") &&
+        console.log(this.editedItem);
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      UserService.deleteUser(this.editedItem.id);
     }
   },
   mounted() {
     this.getRoles();
     this.getUsuarios();
-    this.crearUsuario();
-    this.eliminar();
   }
 };
 </script>
