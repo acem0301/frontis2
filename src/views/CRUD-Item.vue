@@ -1,7 +1,9 @@
+
 <template>
   <v-data-table
     :headers="headers"
     :items="tareas"
+    :states = "states"
     sort-by="calories"
     class="elevation-1"
   >
@@ -11,7 +13,7 @@
         <v-toolbar-title>Lista de ítems</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="700px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo Item</v-btn>
           </template>
@@ -24,24 +26,45 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nombre_item" label="Descripción"></v-text-field>
+                    <v-text-field v-model="item.nombre_item" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.observacion" label="Observación"></v-text-field>
+                    <v-text-field v-model="item.descripcion" label="Descripción"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.estado" label="Estado"></v-text-field>
+                    <v-text-field v-model="item.observacion" label="Observación"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nombre_prioridad" label="Prioridad"></v-text-field>
+                    <v-select
+                      v-model="item.prioridad_id"
+                      :items="priorities"
+                      label="Prioridad"
+                      item-text="descripcion"
+                      item-value="id"
+                      hide-details
+                      single-line
+                    ></v-select>
                   </v-col>
                    <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="editedItem.fase"
-                      :items="items"
-                      :menu-props="{ maxHeight: '400' }"
+                      v-model="item.estado_id"
+                      :items="states"
+                      label="Estado"
+                      item-text="descripcion"
+                      item-value="id"
+                      hide-details
+                      single-line
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-select
+                      v-model="item.fase_id"
+                      :items="phases"
                       label="Fase"
-                      persistent-hint
+                      item-text="nombre"
+                      item-value="id"
+                      hide-details
+                      single-line
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -51,7 +74,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="crearItem">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -80,9 +103,13 @@
 
 <script>
 import ItemService from '../services/item.service'
+import OtherServices from '../services/other.services' 
+import Item from "../models/item";
   export default {
+    
     data: () => ({
       dialog: false,
+      item: new Item(),
       headers: [
         {
           text: 'Id ítem',
@@ -92,12 +119,15 @@ import ItemService from '../services/item.service'
         },
         { text: 'Prioridad', value: 'nombre_prioridad' },
         { text: 'Estado', value: 'estado' },
-        { text: 'Descripción', value: 'nombre_item' },
+        { text: 'Descripción', value: 'descripcion' },
         { text: 'Observación', value: 'observacion' },
         { text: 'Fase', value: 'fase_nombre' },
         { text: 'Acciones', value: 'actions', sortable: false },
       ],
       tareas: [],
+      states: [],
+      priorities: [],
+      phases: [],
       editedIndex: -1,
       editedItem: {
         nombre_prioridad: '',
@@ -151,27 +181,74 @@ import ItemService from '../services/item.service'
         }, 300)
       },
 
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.tareas[this.editedIndex], this.editedItem)
-        } else {
-          this.tareas.push(this.editedItem)
-        }
-        this.close()
-      },
-    },
-     mounted() {
+      getItems() {
         ItemService.listItems().then(
-          response => {
-            this.tareas = response.data;
-          },
-          error => {
-            this.tareas =
-              (error.response && error.response.data) ||
-              error.message ||
-              error.toString();
-          }
-        );
-  }
+            response => {
+              this.tareas = response.data;
+            },
+            error => {
+              this.tareas =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+      },
+
+      getStates() {
+        let table_name = "Item";
+        OtherServices.listStates(table_name).then(
+            response => {
+              this.states = response.data;
+              console.log(this.states);
+            },
+            error => {
+              this.states =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+      },
+
+       getPriorities() {
+        OtherServices.listPriorities().then(
+            response => {
+              this.priorities = response.data;
+            },
+            error => {
+              this.priorities =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+      },
+
+      getPhases() {
+        OtherServices.listPhases().then(
+            response => {
+              this.phases = response.data;
+            },
+            error => {
+              this.phases =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+      },
+
+      crearItem() {
+        ItemService.createItem(this.item);
+      }
+    },
+
+    mounted() {
+          this.getItems();
+          this.getStates();
+          this.getPriorities();
+          this.getPhases();
+      }
   }
 </script>
