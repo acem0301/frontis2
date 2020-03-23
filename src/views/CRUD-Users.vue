@@ -1,25 +1,20 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
-    :hola = "desserts"
+    :items="items"
+    :hola="desserts"
     sort-by="desserts.id"
     class="elevation-1"
   >
     <template v-slot:top>
       <NavBar></NavBar>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Lista de Usuarios </v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+        <v-toolbar-title>Lista de Usuarios</v-toolbar-title>
+        <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{}">
-            <v-btn color="primary" dark class="mb-2" href="/createUser">Crear usuario</v-btn>
-            
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo usuario</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -30,10 +25,10 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
+                    <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.lastName" label="Apellido"></v-text-field>
+                    <v-text-field v-model="editedItem.apellido" label="Apellido"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
@@ -45,7 +40,15 @@
                     <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.role" label="Rol"></v-text-field>
+                    <v-select
+                      v-model="editedItem.rol_id"
+                      :items="roles"
+                      label="Rol"
+                      item-text="descripcion"
+                      item-value="id"
+                      hide-details
+                      single-line
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-container>
@@ -54,26 +57,15 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-icon small class="mr-2" @click="updateUsuario(item)">mdi-pencil</v-icon>
+      <v-icon small @click="eliminar(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -84,12 +76,14 @@
 
   <script>
 import UserService from "../services/user.service";
-import axios from 'axios'
+import RolService from "../services/rol.service";
+import User from "../models/user";
 export default {
   name: "ListUsers",
   data() {
-    return{
+    return {
       dialog: false,
+      user: new User(),
       headers: [
         {
           text: "Usuario",
@@ -100,35 +94,32 @@ export default {
         { text: "Nombre", value: "nombre" },
         { text: "Apellido", value: "apellido" },
         { text: "E-mail", value: "email" },
-        { text: "Rol", value: "rol" },
+        { text: "Rol", value: "descripcion" },
         { text: "Activo", value: "activo" },
         { text: "Acciones", value: "actions", sortable: false }
       ],
       desserts: [],
+      items: [],
+      roles: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        lastName: '',
-        email: '',
-        username: '',
-        password: '',
-        role: ''
+        id: "",
+        nombre: "",
+        apellido: "",
+        email: "",
+        username: "",
+        password: "",
+        rol_id: ""
       },
       defaultItem: {
-        nombre: '',
-        apellido: '',
-        email: '',
-        nombreUsuario: '',
-        password: '',
-        rol: ''
+        nombre: "",
+        apellido: "",
+        email: "",
+        username: "",
+        password: "",
+        rol_id: ""
       }
-    }
-  },
-
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
+    };
   },
 
   watch: {
@@ -137,24 +128,16 @@ export default {
     }
   },
 
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "Nuevo ítem" : "Editar ítem";
+    }
+  },
   created() {
     this.initialize();
   },
 
   methods: {
-    
-    editItem(item) {
-      this.editedIndex = this.desserts.find(x => x.id == data.id);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      const index = this.desserts.find(x => x.id == data.id);
-      confirm("Are you sure you want to delete this item?") &&
-        this.desserts.splice(index, 1);
-    },
-
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -170,23 +153,59 @@ export default {
         this.desserts.push(this.editedItem);
       }
       this.close();
+    },
+    getUsuarios() {
+      UserService.listUsers().then(
+        response => {
+          this.items = response.data;
+        },
+        error => {
+          this.items =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+    getRoles() {
+      RolService.listRoles().then(
+        response => {
+          this.roles = response.data;
+        },
+        error => {
+          this.items =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+    guardar() {
+      if (this.editedIndex > -1) {
+        UserService.updateUser(this.editedItem);
+      } else {
+        UserService.createUser(this.editedItem);
+      }
+      this.close();
+    },
+
+    updateUsuario(item) {
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    eliminar(item) {
+      confirm("Are you sure you want to delete this item?") &&
+        console.log(this.editedItem);
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      UserService.deleteUser(this.editedItem.id);
     }
   },
-   mounted() {
-    let vue = this;
-    UserService.listUsers().then(
-      response => {
-        vue.desserts = response.data.userTemp;
-        console.log(vue.desserts);
-      },
-      error => {
-        this.desserts =
-          (error.response && error.response.data.userTemp) ||
-          error.message ||
-          error.toString();
-          console.log("error");
-      }
-    );
+  mounted() {
+    this.getRoles();
+    this.getUsuarios();
   }
-}
+};
 </script>

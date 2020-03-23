@@ -51,31 +51,30 @@ export const router = new Router({
       component: () => import('./views/BoardUser.vue')
     },
     {
-      path: '/createUser',
-      name: 'createUser',
-      // lazy-loaded
-      component: () => import('./views/CreateUser.vue')
-
-    },
-    {
       path: '/listUsers',
       name: 'listUsers',
       // lazy-loaded
-      component: () => import('./views/ListUsers.vue')
-
-    },
-    {
-      path: '/createRole',
-      name: 'createRole',
-      // lazy-loaded
-      component: () => import('./views/CreateRole.vue')
+      component: () => import('./views/CRUD-Users.vue')
 
     },
     {
       path: '/listRoles',
+      
       name: 'listRoles',
       // lazy-loaded
-      component: () => import('./views/ListRoles.vue')
+      component: () => import('./views/CRUD-Roles.vue')
+
+    },
+    {
+      path: '/listItems',
+      name: 'listItems',
+      component: () => import('./views/CRUD-Item.vue')
+
+    },
+    {
+      path: '/listProjects',
+      name: 'listProjects',
+      component: () => import('./views/Project.vue')
 
     }
   ]
