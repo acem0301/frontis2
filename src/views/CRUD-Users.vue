@@ -42,7 +42,7 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="editedItem.rol_id"
-                      :items="items"
+                      :items="roles"
                       label="Rol"
                       item-text="descripcion"
                       item-value="id"
@@ -100,6 +100,7 @@ export default {
       ],
       desserts: [],
       items: [],
+      roles: [],
       editedIndex: -1,
       editedItem: {
         id: "",
@@ -116,7 +117,7 @@ export default {
         email: "",
         username: "",
         password: "",
-        rol: ""
+        rol_id: ""
       }
     };
   },
@@ -169,7 +170,7 @@ export default {
     getRoles() {
       RolService.listRoles().then(
         response => {
-          this.items = response.data;
+          this.roles = response.data;
         },
         error => {
           this.items =
