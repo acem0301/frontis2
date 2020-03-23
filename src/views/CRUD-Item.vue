@@ -26,9 +26,6 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.id" label="Id"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
