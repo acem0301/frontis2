@@ -37,7 +37,7 @@
                     <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
+                    <v-text-field v-model="editedItem.password" type="password" label="Contraseña"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select

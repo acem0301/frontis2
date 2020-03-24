@@ -1,14 +1,14 @@
 import axios from 'axios';
-
-const API_URL = 'https://backendis2.herokuapp.com/';
-//const API_URL = 'http://localhost:3000/';
+import md5 from 'js-md5'
+//const API_URL = 'https://backendis2.herokuapp.com/';
+const API_URL = 'http://localhost:3000/';
 
 class AuthService {
   login(user) {
     return axios
       .post(API_URL + 'login', {
         username: user.username,
-        password: user.password
+        password: md5(user.password)
       })
       .then(response => {
         if (response.data.accessToken) {
