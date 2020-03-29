@@ -199,11 +199,11 @@ export default {
     },
 
     eliminar(item) {
-      confirm("Are you sure you want to delete this item?") &&
-        console.log(this.editedItem);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      UserService.deleteUser(this.editedItem.id);
+      if (confirm("Are you sure you want to delete this item?")) {
+        this.editedIndex = this.items.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        UserService.deleteUser(this.editedItem.id);
+      } 
     }
   },
   mounted() {
