@@ -22,16 +22,19 @@ class ItemService {
         fase_id: item.fase_id,
         id_tarea_padre: null,
         es_padre: false
+      },
+      {
+        headers: authHeader()
       });
   }
 
 
   deleteItem(id) {
     return axios.delete(API_URL + 'deleteItem/' + id, {
-
-    }).then(response => {
-      return response.data
-    })
+    },
+    {
+      headers: authHeader()
+    });
   }
 
   updateItem(item) {
@@ -45,13 +48,9 @@ class ItemService {
         fase_id: item.fase_id,
         id_tarea_padre: item.id_tarea_padre,
         es_padre: false
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+      },
+      {
+        headers: authHeader()
       });
   }
 

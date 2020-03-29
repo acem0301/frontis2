@@ -7,18 +7,21 @@ class OthersServices {
 
 
   listStates(table_name) {
-    return axios.get(API_URL + 'listEstados' + '/' + table_name, 
-    { headers: authHeader() });
+    return axios.get(API_URL + 'listEstados' + '/' + table_name, { 
+      headers: authHeader() 
+    });
   }
 
   listPriorities() {
-    return axios.get(API_URL + 'listPrioridad', 
-    { headers: authHeader() });
+    return axios.get(API_URL + 'listPrioridad', { 
+      headers: authHeader() 
+    });
   }
 
   listPhases() {
-    return axios.get(API_URL + 'listFases', 
-    { headers: authHeader() });
+    return axios.get(API_URL + 'listFases', { 
+      headers: authHeader() 
+    });
   }
 }
 

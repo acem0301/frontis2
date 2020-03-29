@@ -16,23 +16,19 @@ class RolService {
   
   deleteRol(id) {
     return axios.delete(API_URL + 'deleteRol/' + id, {
-
-    }).then(response => {
-      return response.data
-    })
+    },
+    {
+      headers: authHeader()
+    });
   }
 
   updateRol(rol) {
     return axios
       .put(API_URL + 'updateRol/' + rol.id, {
         descripcion: rol.descripcion
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+      },
+      {
+        headers: authHeader()
       });
   }
 
@@ -40,13 +36,9 @@ class RolService {
     return axios
       .post(API_URL + 'createRol', {
         descripcion: rol.descripcion
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+      },
+      {
+        headers: authHeader()
       });
   }
 }

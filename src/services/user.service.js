@@ -28,10 +28,10 @@ class UserService {
 
   deleteUser(id) {
     return axios.delete(API_URL + 'deleteUser/' + id, {
-
-    }).then(response => {
-      return response.data
-    })
+    },
+    {
+      headers: authHeader()
+    });
   }
 
   updateUser(user) {
@@ -43,13 +43,9 @@ class UserService {
         rol_id: user.rol_id,
         username: user.username,
         password: user.password
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+      },
+      {
+        headers: authHeader()
       });
   }
 
@@ -68,13 +64,9 @@ class UserService {
         rol_id: user.rol_id,
         username: user.username,
         password: user.password
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+      },
+      {
+        headers: authHeader()
       });
   }
 

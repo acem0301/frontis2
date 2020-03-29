@@ -17,22 +17,18 @@ class ProjectService {
         nombre: project.nombre,
         descripcion: project.descripcion,
         estado_id: project.estado_id
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+      },
+      {
+        headers: authHeader()
       });
   }
 
   deleteProject(id) {
     return axios.delete(API_URL + 'deleteProject/' + id, {
-
-    }).then(response => {
-      return response.data
-    })
+    },
+    {
+      headers: authHeader()
+    });
   }
 
   updateProject(project) {
@@ -41,17 +37,11 @@ class ProjectService {
         nombre: project.nombre,
         descripcion: project.descripcion,
         estado_id: project.estado_id
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+      },
+      {
+        headers: authHeader()
       });
   }
-
-
 }
 
 export default new ProjectService();
