@@ -33,12 +33,18 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="5">
                     <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.password" type="password" label="Contraseña"></v-text-field>
-                  </v-col>
+                  <div v-if="editedIndex === -1">
+                    <v-col cols="12" sm="6" md="8">
+                      <v-text-field
+                        v-model="editedItem.password"
+                        type="password"
+                        label="Contraseña"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="editedItem.rol_id"
@@ -132,9 +138,6 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "Nuevo ítem" : "Editar ítem";
     }
-  },
-  created() {
-    this.initialize();
   },
 
   methods: {

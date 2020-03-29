@@ -54,7 +54,7 @@ export const router = new Router({
       path: '/listUsers',
       name: 'listUsers',
       // lazy-loaded
-      component: () => import('./views/CRUD-Users.vue')
+      component: () => import('./views/Users.vue')
 
     },
     {
@@ -62,13 +62,13 @@ export const router = new Router({
       
       name: 'listRoles',
       // lazy-loaded
-      component: () => import('./views/CRUD-Roles.vue')
+      component: () => import('./views/Roles.vue')
 
     },
     {
       path: '/listItems',
       name: 'listItems',
-      component: () => import('./views/CRUD-Item.vue')
+      component: () => import('./views/Item.vue')
 
     },
     {
