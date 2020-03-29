@@ -56,7 +56,6 @@
 <script>
 import RolService from "../services/rol.service";
 import Rol from "../models/rol";
-import axios from "axios";
 export default {
   name: "ListRoles",
   data() {
@@ -145,11 +144,11 @@ export default {
     },
 
     deleteRol(item) {
-      confirm("Are you sure you want to delete this item?") &&
-        console.log(this.editedItem);
-      this.editedIndex = this.roles.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      RolService.deleteRol(this.editedItem.id);
+      if (confirm("Are you sure you want to delete this item?")) {
+        this.editedIndex = this.roles.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        RolService.deleteRol(this.editedItem.id);
+      }
     }
   },
   mounted() {

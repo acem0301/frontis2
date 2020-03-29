@@ -126,11 +126,11 @@ export default {
     },
 
     eliminar(item) {
-      confirm("Are you sure you want to delete this item?") &&
-        console.log(this.editedItem);
-      this.editedIndex = this.proyectos.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      ProjectService.deleteProject(this.editedItem.id);
+      if (confirm("Are you sure you want to delete this item?")) {
+        this.editedIndex = this.proyectos.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        ProjectService.deleteProject(this.editedItem.id);
+      }
     },
 
     close() {
