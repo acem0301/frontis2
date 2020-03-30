@@ -15,7 +15,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="700px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo Item</v-btn>
+            <v-btn small color="primary" dark class="mb-2" v-on="on">Agregar</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -191,7 +191,6 @@ export default {
       OtherServices.listStates(table_name).then(
         response => {
           this.states = response.data;
-          console.log(this.states);
         },
         error => {
           this.states =
@@ -233,7 +232,6 @@ export default {
       if (this.editedIndex > -1) {
         ItemService.updateItem(this.editedItem);
       } else {
-        console.log(this.editedItem);
         ItemService.createItem(this.editedItem);
       }
       this.close();
