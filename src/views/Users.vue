@@ -101,7 +101,6 @@ export default {
         { text: "Apellido", value: "apellido" },
         { text: "E-mail", value: "email" },
         { text: "Rol", value: "descripcion" },
-        { text: "Activo", value: "activo" },
         { text: "Acciones", value: "actions", sortable: false }
       ],
       desserts: [],
