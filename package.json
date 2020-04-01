@@ -18,6 +18,7 @@
     "core-js": "^2.6.5",
     "jquery": "^3.4.1",
     "popper.js": "^1.15.0",
+    "v-switch-case": "^1.0.3",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
@@ -44,7 +45,9 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
