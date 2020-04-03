@@ -1,58 +1,34 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      <form name="form" @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label for="username">Usuario</label>
-          <input
-            v-model="user.username"
-            v-validate="'required'"
-            type="text"
-            class="form-control"
-            name="username"
-          />
-          <div
-            v-if="errors.has('username')"
-            class="alert alert-danger"
-            role="alert"
-          >Introduzca usuario</div>
+  <mdb-container>
+    <div class="centered-container h-100">
+      <md-content class="md-elevation-3">
+        <div class="title">
+          <div class="md-title">INICIAR SESIÓN</div>
         </div>
         <div class="form-group">
-          <label for="password">Contraseña</label>
-          <input
-            v-model="user.password"
-            v-validate="'required'"
-            type="password"
-            class="form-control"
-            name="password"
-          />
-          <div
-            v-if="errors.has('password')"
-            class="alert alert-danger"
-            role="alert"
-          >Ingrese contraseña</div>
+          <md-field>
+            <label>Número de Documento</label>
+            <md-input v-model="user.username" autofocus></md-input>
+          </md-field>
+          <md-field md-has-password>
+            <label>Clave</label>
+            <md-input v-model="user.password" type="password"></md-input>
+          </md-field>
         </div>
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
-            <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-            <span>Login</span>
-          </button>
+        <div class="actions md-layout md-alignment-center">
+          <md-button class="md-raised md-primary" @click="handleLogin">INGRESAR</md-button>
         </div>
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
+        <div class="loading-overlay" v-if="loading">
+          <md-progress-spinner md-mode="indeterminate" :md-stroke="2"></md-progress-spinner>
         </div>
-      </form>
+      </md-content>
     </div>
-  </div>
+  </mdb-container>
 </template>
 
 <script>
 import User from "../models/user";
+import { mdbContainer } from "mdbvue";
 
 export default {
   name: "Login",
@@ -62,6 +38,9 @@ export default {
       loading: false,
       message: ""
     };
+  },
+  components: {
+    mdbContainer
   },
   computed: {
     loggedIn() {
@@ -102,37 +81,55 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  display: block;
-  margin-top: 10px;
+<style>
+.centered-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  margin-top: 40px;
 }
-
-.card-container.card {
-  max-width: 350px !important;
-  padding: 40px 40px;
+.centered-container .title {
+  text-align: center;
+  margin-bottom: 30px;
 }
-
-.card {
-  background-color: #f7f7f7;
-  padding: 20px 25px 30px;
-  margin: 0 auto 25px;
-  margin-top: 50px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+.centered-container .title img {
+  margin-bottom: 16px;
+  max-width: 80px;
 }
-
-.profile-img-card {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 10px;
-  display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
+.centered-container .actions .md-button {
+  margin: 0;
+}
+.centered-container .form {
+  margin-bottom: 60px;
+}
+.h-100 {
+  height: 100%;
+}
+.centered-container .md-content {
+  z-index: 1;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  border-radius: 10px;
+}
+.centered-container .loading-overlay {
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.md-elevation-3 {
+  box-shadow: 0 0 10px !important;
+  color: #006446 !important;
 }
 </style>
