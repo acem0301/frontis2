@@ -7,7 +7,7 @@
         </div>
         <div class="form-group">
           <md-field>
-            <label>Número de Documento</label>
+            <label>Usurio</label>
             <md-input v-model="user.username" autofocus></md-input>
           </md-field>
           <md-field md-has-password>
