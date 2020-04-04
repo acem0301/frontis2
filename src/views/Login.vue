@@ -199,6 +199,6 @@ export default {
 }
 .md-elevation-3 {
   box-shadow: 0 0 10px !important;
-  color: #006446 !important;
+  color: #00b6c2 !important;
 }
 </style>
