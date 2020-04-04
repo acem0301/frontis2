@@ -5,18 +5,6 @@
         <div class="title">
           <div class="md-title">INICIAR SESIÓN</div>
         </div>
-        <!-- <div class="form-group"> -->
-
-        <!-- <md-field>
-            <label>Usuario</label>
-            <md-input v-model="user.username" autofocus></md-input>
-          </md-field>
-          <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-          <md-field md-has-password>
-            <label>Clave</label>
-            <md-input v-model="user.password" type="password"></md-input>
-        </md-field>-->
-        <!-- </div> -->
         <form novalidate class="md-layout" @submit.prevent="validateUser">
           <md-card-content>
             <div class="md-layout md-gutter">
@@ -54,14 +42,8 @@
           </md-card-content>
 
           <md-progress-bar md-mode="indeterminate" v-if="sending" />
-
-          <!-- <md-card-actions>
-            <md-button type="submit" class="md-primary" :disabled="sending">Create user</md-button>
-          </md-card-actions> -->
-
           <div class="actions md-layout md-alignment-center">
             <md-button type="submit" class="md-raised md-primary" :disabled="sending">INGRESAR</md-button>
-
           </div>
         </form>
         <div class="loading-overlay" v-if="loading">
@@ -75,7 +57,7 @@
 <script>
 import { mdbContainer } from "mdbvue";
 import { validationMixin } from "vuelidate";
-import { required, minLength} from "vuelidate/lib/validators";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Login",
