@@ -5,19 +5,65 @@
         <div class="title">
           <div class="md-title">INICIAR SESIÓN</div>
         </div>
-        <div class="form-group">
-          <md-field>
-            <label>Usurio</label>
+        <!-- <div class="form-group"> -->
+
+        <!-- <md-field>
+            <label>Usuario</label>
             <md-input v-model="user.username" autofocus></md-input>
           </md-field>
+          <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
           <md-field md-has-password>
             <label>Clave</label>
             <md-input v-model="user.password" type="password"></md-input>
-          </md-field>
-        </div>
-        <div class="actions md-layout md-alignment-center">
-          <md-button class="md-raised md-primary" @click="handleLogin">INGRESAR</md-button>
-        </div>
+        </md-field>-->
+        <!-- </div> -->
+        <form novalidate class="md-layout" @submit.prevent="validateUser">
+          <md-card-content>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('username')">
+                  <label for="username">Usuario</label>
+                  <md-input
+                    name="username"
+                    id="username"
+                    autocomplete="given-name"
+                    v-model="user.username"
+                    :disabled="sending"
+                  />
+                  <span class="md-error" v-if="!$v.user.username.required">Ingrese Usuario</span>
+                  <span class="md-error" v-else-if="!$v.user.username.minlength">Invalid first name</span>
+                </md-field>
+              </div>
+
+              <div class="md-layout-item md-small-size-100">
+                <md-field md-has-password :class="getValidationClass('password')">
+                  <label for="password">Contraseña</label>
+                  <md-input
+                    name="password"
+                    id="password"
+                    autocomplete="family-name"
+                    v-model="user.password"
+                    type="password"
+                    :disabled="sending"
+                  />
+                  <span class="md-error" v-if="!$v.user.password.required">Ingrese contraseña</span>
+                  <span class="md-error" v-else-if="!$v.user.password.minlength">Invalid last name</span>
+                </md-field>
+              </div>
+            </div>
+          </md-card-content>
+
+          <md-progress-bar md-mode="indeterminate" v-if="sending" />
+
+          <!-- <md-card-actions>
+            <md-button type="submit" class="md-primary" :disabled="sending">Create user</md-button>
+          </md-card-actions> -->
+
+          <div class="actions md-layout md-alignment-center">
+            <md-button type="submit" class="md-raised md-primary" :disabled="sending">INGRESAR</md-button>
+
+          </div>
+        </form>
         <div class="loading-overlay" v-if="loading">
           <md-progress-spinner md-mode="indeterminate" :md-stroke="2"></md-progress-spinner>
         </div>
@@ -27,18 +73,39 @@
 </template>
 
 <script>
-import User from "../models/user";
 import { mdbContainer } from "mdbvue";
+import { validationMixin } from "vuelidate";
+import { required, minLength} from "vuelidate/lib/validators";
 
 export default {
   name: "Login",
+  mixins: [validationMixin],
   data() {
     return {
-      user: new User("", ""),
+      user: {
+        username: null,
+        password: null
+      },
+      userSaved: false,
+      sending: false,
+      lastUser: null,
       loading: false,
       message: ""
     };
   },
+  validations: {
+    user: {
+      username: {
+        required,
+        minLength: minLength(3)
+      },
+      password: {
+        required,
+        minLength: minLength(3)
+      }
+    }
+  },
+
   components: {
     mdbContainer
   },
@@ -53,6 +120,26 @@ export default {
     }
   },
   methods: {
+    getValidationClass(fieldName) {
+      const field = this.$v.user[fieldName];
+
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty
+        };
+      }
+    },
+    clearForm() {
+      this.$v.$reset();
+      this.user.username = null;
+    },
+    validateUser() {
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        this.handleLogin();
+      }
+    },
     handleLogin() {
       this.loading = true;
       this.$validator.validateAll().then(isValid => {
