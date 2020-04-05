@@ -80,9 +80,9 @@
     <template v-slot:item.actions="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
     </template>
-    <!-- <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Resetear</v-btn>
-    </template>-->
+    <template v-slot:item.finalizar="{item}">
+      <v-btn v-if="item.estado == 'Iniciado'" small color="primary" @click="initialize">Finalizar</v-btn>
+    </template>
   </v-data-table>
 </template>
 
@@ -107,7 +107,8 @@ export default {
         { text: "Descripción", value: "descripcion" },
         { text: "Observación", value: "observacion" },
         { text: "Fase", value: "fase_nombre" },
-        { text: "Acciones", value: "actions", sortable: false }
+        { text: "Acciones", value: "actions", sortable: false },
+        { text: "", value: "finalizar", sortable: false }
       ],
       tareas: [],
       states: [],
