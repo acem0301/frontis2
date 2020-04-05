@@ -69,7 +69,12 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+      <v-icon
+        v-if="item.estado !== 'Finalizado'"
+        small
+        class="mr-2"
+        @click="editItem(item)"
+      >mdi-pencil</v-icon>
     </template>
     <template v-slot:item.finalizar="{item}">
       <v-btn
