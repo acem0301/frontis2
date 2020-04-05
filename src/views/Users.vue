@@ -101,6 +101,7 @@ export default {
         { text: "Apellido", value: "apellido" },
         { text: "E-mail", value: "email" },
         { text: "Rol", value: "descripcion" },
+        { text: "Proyecto", value: "proyecto_nombre"},
         { text: "Acciones", value: "actions", sortable: false }
       ],
       desserts: [],
@@ -114,7 +115,8 @@ export default {
         email: "",
         username: "",
         password: "",
-        rol_id: ""
+        rol_id: "",
+        proyecto_id: ""
       },
       defaultItem: {
         nombre: "",
@@ -122,7 +124,8 @@ export default {
         email: "",
         username: "",
         password: "",
-        rol_id: ""
+        rol_id: "",
+        proyecto_id: ""
       }
     };
   },
