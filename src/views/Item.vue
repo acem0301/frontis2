@@ -70,7 +70,7 @@
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
     </template>
     <template v-slot:item.finalizar="{item}">
-      <v-btn v-if="item.estado == 'Iniciado'" small color="primary" @click="initialize">Finalizar</v-btn>
+      <v-btn v-if="item.estado == 'Iniciado'" small color="primary" @click="changeStateFinalize(item)">Finalizar</v-btn>
     </template>
   </v-data-table>
 </template>
@@ -211,6 +211,10 @@ export default {
         ItemService.createItem(this.editedItem);
       }
       this.close();
+    },
+
+    changeStateFinalize(item) {
+      ItemService.updateItemState(item.id)
     }
   },
 

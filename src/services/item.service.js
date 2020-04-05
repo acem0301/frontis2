@@ -45,6 +45,12 @@ class ItemService {
       });
   }
 
+  updateItemState(id) {
+    return axios
+      .put(API_URL + 'updateItemState/' + id, {}, {
+        headers: authHeader()
+      });
+  }
 }
 
 export default new ItemService();
