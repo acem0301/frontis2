@@ -44,20 +44,9 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="editedItem.estado_id"
-                      :items="states"
-                      label="Estado"
-                      item-text="descripcion"
-                      item-value="id"
-                      hide-details
-                      single-line
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.fase_id"
-                      :items="phases"
-                      label="Fase"
+                      v-model="editedItem.proyecto_id"
+                      :items="projects"
+                      label="Proyecto"
                       item-text="nombre"
                       item-value="id"
                       hide-details
@@ -89,6 +78,7 @@
 <script>
 import ItemService from "../services/item.service";
 import OtherServices from "../services/other.services";
+import Project from "../services/project.service";
 import Item from "../models/item";
 export default {
   data() {
@@ -106,14 +96,14 @@ export default {
         { text: "Estado", value: "estado" },
         { text: "Descripción", value: "descripcion" },
         { text: "Observación", value: "observacion" },
-        { text: "Fase", value: "fase_nombre" },
+        { text: "Proyecto", value: "proyecto_nombre" },
         { text: "Acciones", value: "actions", sortable: false },
         { text: "", value: "finalizar", sortable: false }
       ],
       tareas: [],
       states: [],
       priorities: [],
-      phases: [],
+      projects: [],
       editedIndex: -1,
       editedItem: {
         id: "",
@@ -122,7 +112,7 @@ export default {
         estado_id: "",
         descripcion: "",
         observacion: "",
-        fase_id: "",
+        proyecto_id: "",
         id_tarea_padre: "",
         es_padre: false
       },
@@ -133,7 +123,7 @@ export default {
         estado_id: "",
         descripcion: "",
         observacion: "",
-        fase_id: "",
+        proyecto_id: "",
         id_tarea_padre: "",
         es_padre: false
       }
@@ -187,21 +177,6 @@ export default {
       );
     },
 
-    getStates() {
-      let table_name = "Item";
-      OtherServices.listStates(table_name).then(
-        response => {
-          this.states = response.data;
-        },
-        error => {
-          this.states =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-        }
-      );
-    },
-
     getPriorities() {
       OtherServices.listPriorities().then(
         response => {
@@ -216,13 +191,13 @@ export default {
       );
     },
 
-    getPhases() {
-      OtherServices.listPhases().then(
+    getProjects() {
+      Project.listProjects().then(
         response => {
-          this.phases = response.data;
+          this.projects = response.data;
         },
         error => {
-          this.phases =
+          this.projects =
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
@@ -241,9 +216,8 @@ export default {
 
   mounted() {
     this.getItems();
-    this.getStates();
     this.getPriorities();
-    this.getPhases();
+    this.getProjects();
   }
 };
 </script>

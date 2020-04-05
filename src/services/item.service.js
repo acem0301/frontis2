@@ -13,26 +13,18 @@ class ItemService {
 
   createItem(item) {
     return axios
-      .post(API_URL + 'createItem', {
+      .post(API_URL + 'createItem/' + item.proyecto_id, {
         version: '1',
         prioridad_id: item.prioridad_id,
-        estado_id: item.estado_id,
         descripcion: item.descripcion,
-        observacion: item.observacion,
-        fase_id: item.fase_id,
-        id_tarea_padre: null,
-        es_padre: false
-      },
-      {
+        observacion: item.observacion
+      }, {
         headers: authHeader()
       });
   }
 
-
   deleteItem(id) {
-    return axios.delete(API_URL + 'deleteItem/' + id, {
-    },
-    {
+    return axios.delete(API_URL + 'deleteItem/' + id, {}, {
       headers: authHeader()
     });
   }
@@ -48,8 +40,7 @@ class ItemService {
         fase_id: item.fase_id,
         id_tarea_padre: item.id_tarea_padre,
         es_padre: false
-      },
-      {
+      }, {
         headers: authHeader()
       });
   }
