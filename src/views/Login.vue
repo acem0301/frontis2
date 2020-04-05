@@ -19,7 +19,7 @@
                     :disabled="sending"
                   />
                   <span class="md-error" v-if="!$v.user.username.required">Ingrese Usuario</span>
-                  <span class="md-error" v-else-if="!$v.user.username.minlength">Invalid first name</span>
+                  <span class="md-error" v-else-if="!$v.user.username.minlength">!</span>
                 </md-field>
               </div>
 
@@ -35,7 +35,7 @@
                     :disabled="sending"
                   />
                   <span class="md-error" v-if="!$v.user.password.required">Ingrese contraseña</span>
-                  <span class="md-error" v-else-if="!$v.user.password.minlength">Invalid last name</span>
+                  <span class="md-error" v-else-if="!$v.user.password.minlength">!</span>
                 </md-field>
               </div>
             </div>
@@ -43,7 +43,7 @@
 
           <md-progress-bar md-mode="indeterminate" v-if="sending" />
           <div class="actions md-layout md-alignment-center">
-            <md-button type="submit" class="md-raised md-primary" :disabled="sending">INGRESAR</md-button>
+            <md-button type="submit" class="md-raised md-primary primary" :disabled="sending">INGRESAR</md-button>
           </div>
         </form>
         <div class="loading-overlay" v-if="loading">

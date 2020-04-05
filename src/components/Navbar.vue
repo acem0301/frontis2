@@ -52,7 +52,6 @@ export default {
           action: "mdi-account",
           title: "Administración",
           route: "",
-          active: true,
           items: [
             { title: "Usuarios", route: "/listUsers" },
             { title: "Roles", route: "/listRoles" }
