@@ -42,17 +42,19 @@
                       single-line
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.proyecto_id"
-                      :items="projects"
-                      label="Proyecto"
-                      item-text="nombre"
-                      item-value="id"
-                      hide-details
-                      single-line
-                    ></v-select>
-                  </v-col>
+                  <div v-if="editedIndex === -1">
+                    <v-col cols="12" sm="6" md="7">
+                      <v-select
+                        v-model="editedItem.proyecto_id"
+                        :items="projects"
+                        label="Proyecto"
+                        item-text="nombre"
+                        item-value="id"
+                        hide-details
+                        single-line
+                      ></v-select>
+                    </v-col>
+                  </div>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -70,7 +72,12 @@
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
     </template>
     <template v-slot:item.finalizar="{item}">
-      <v-btn v-if="item.estado == 'Iniciado'" small color="primary" @click="changeStateFinalize(item)">Finalizar</v-btn>
+      <v-btn
+        v-if="item.estado == 'Iniciado'"
+        small
+        color="primary"
+        @click="changeStateFinalize(item)"
+      >Finalizar</v-btn>
     </template>
   </v-data-table>
 </template>
@@ -214,7 +221,7 @@ export default {
     },
 
     changeStateFinalize(item) {
-      ItemService.updateItemState(item.id)
+      ItemService.updateItemState(item.id);
     }
   },
 
