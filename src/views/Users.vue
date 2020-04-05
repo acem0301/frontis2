@@ -56,6 +56,17 @@
                       single-line
                     ></v-select>
                   </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-select
+                      v-model="editedItem.proyecto_id"
+                      :items="proyecto"
+                      label="Proyecto"
+                      item-text="nombre"
+                      item-value="id"
+                      hide-details
+                      single-line
+                    ></v-select>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -83,6 +94,7 @@
   <script>
 import UserService from "../services/user.service";
 import RolService from "../services/rol.service";
+import ProjectService from "../services/project.service";
 import User from "../models/user";
 export default {
   name: "ListUsers",
@@ -185,6 +197,19 @@ export default {
         }
       );
     },
+     getProyecto() {
+      ProjectService.listProjects().then(
+        response => {
+          this.proyecto = response.data;
+        },
+        error => {
+          this.items =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
     guardar() {
       if (this.editedIndex > -1) {
         UserService.updateUser(this.editedItem);
@@ -211,6 +236,7 @@ export default {
   mounted() {
     this.getRoles();
     this.getUsuarios();
+    this.getProyecto();
   }
 };
 </script>
