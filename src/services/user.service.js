@@ -18,7 +18,8 @@ class UserService {
         email: user.email,
         rol_id: user.rol_id,
         username: user.username,
-        password: user.password
+        password: user.password,
+        proyecto_id: user.proyecto_id
       }, {
         headers: authHeader()
       });
@@ -38,7 +39,8 @@ class UserService {
         email: user.email,
         rol_id: user.rol_id,
         username: user.username,
-        password: user.password
+        password: user.password,
+        proyecto_id: user.proyecto_id
       }, {
         headers: authHeader()
       });
