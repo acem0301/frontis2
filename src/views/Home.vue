@@ -3,7 +3,6 @@
   <NavBar></NavBar>
   <div class="container">
     <header class="jumbotron">
-      <h3>hola</h3>
     </header>
   </div>
 </div>
