@@ -14,7 +14,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo Proyecto</v-btn>
+            <v-btn small color="primary" dark class="mb-2" v-on="on">Agregar</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -126,11 +126,11 @@ export default {
     },
 
     eliminar(item) {
-      confirm("Are you sure you want to delete this item?") &&
-        console.log(this.editedItem);
-      this.editedIndex = this.proyectos.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      ProjectService.deleteProject(this.editedItem.id);
+      if (confirm("Are you sure you want to delete this item?")) {
+        this.editedIndex = this.proyectos.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        ProjectService.deleteProject(this.editedItem.id);
+      }
     },
 
     close() {

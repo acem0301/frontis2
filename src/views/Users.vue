@@ -14,7 +14,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">Nuevo usuario</v-btn>
+            <v-btn small color="primary" dark class="mb-2" v-on="on">Agregar</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -33,18 +33,35 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="5">
                     <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.password" label="Contraseña"></v-text-field>
-                  </v-col>
+                  <div v-if="editedIndex === -1">
+                    <v-col cols="12" sm="6" md="8">
+                      <v-text-field
+                        v-model="editedItem.password"
+                        type="password"
+                        label="Contraseña"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="editedItem.rol_id"
                       :items="roles"
                       label="Rol"
                       item-text="descripcion"
+                      item-value="id"
+                      hide-details
+                      single-line
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-select
+                      v-model="editedItem.proyecto_id"
+                      :items="proyecto"
+                      label="Proyecto"
+                      item-text="nombre"
                       item-value="id"
                       hide-details
                       single-line
@@ -77,6 +94,7 @@
   <script>
 import UserService from "../services/user.service";
 import RolService from "../services/rol.service";
+import ProjectService from "../services/project.service";
 import User from "../models/user";
 export default {
   name: "ListUsers",
@@ -95,7 +113,7 @@ export default {
         { text: "Apellido", value: "apellido" },
         { text: "E-mail", value: "email" },
         { text: "Rol", value: "descripcion" },
-        { text: "Activo", value: "activo" },
+        { text: "Proyecto", value: "proyecto_nombre"},
         { text: "Acciones", value: "actions", sortable: false }
       ],
       desserts: [],
@@ -109,7 +127,8 @@ export default {
         email: "",
         username: "",
         password: "",
-        rol_id: ""
+        rol_id: "",
+        proyecto_id: ""
       },
       defaultItem: {
         nombre: "",
@@ -117,7 +136,8 @@ export default {
         email: "",
         username: "",
         password: "",
-        rol_id: ""
+        rol_id: "",
+        proyecto_id: ""
       }
     };
   },
@@ -132,9 +152,6 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "Nuevo ítem" : "Editar ítem";
     }
-  },
-  created() {
-    this.initialize();
   },
 
   methods: {
@@ -180,6 +197,19 @@ export default {
         }
       );
     },
+     getProyecto() {
+      ProjectService.listProjects().then(
+        response => {
+          this.proyecto = response.data;
+        },
+        error => {
+          this.items =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
     guardar() {
       if (this.editedIndex > -1) {
         UserService.updateUser(this.editedItem);
@@ -196,16 +226,17 @@ export default {
     },
 
     eliminar(item) {
-      confirm("Are you sure you want to delete this item?") &&
-        console.log(this.editedItem);
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      UserService.deleteUser(this.editedItem.id);
+      if (confirm("Are you sure you want to delete this item?")) {
+        this.editedIndex = this.items.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        UserService.deleteUser(this.editedItem.id);
+      } 
     }
   },
   mounted() {
     this.getRoles();
     this.getUsuarios();
+    this.getProyecto();
   }
 };
 </script>

@@ -1,67 +1,95 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      <form name="form" @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label for="username">Usuario</label>
-          <input
-            v-model="user.username"
-            v-validate="'required'"
-            type="text"
-            class="form-control"
-            name="username"
-          />
-          <div
-            v-if="errors.has('username')"
-            class="alert alert-danger"
-            role="alert"
-          >Introduzca usuario</div>
+  <mdb-container>
+    <div class="centered-container h-100">
+      <md-content class="md-elevation-3">
+        <div class="title">
+          <div class="md-title">INICIAR SESIÓN</div>
         </div>
-        <div class="form-group">
-          <label for="password">Contraseña</label>
-          <input
-            v-model="user.password"
-            v-validate="'required'"
-            type="password"
-            class="form-control"
-            name="password"
-          />
-          <div
-            v-if="errors.has('password')"
-            class="alert alert-danger"
-            role="alert"
-          >Ingrese contraseña</div>
+        <form novalidate class="md-layout" @submit.prevent="validateUser">
+          <md-card-content>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('username')">
+                  <label for="username">Usuario</label>
+                  <md-input
+                    name="username"
+                    id="username"
+                    autocomplete="given-name"
+                    v-model="user.username"
+                    :disabled="sending"
+                  />
+                  <span class="md-error" v-if="!$v.user.username.required">Ingrese Usuario</span>
+                  <span class="md-error" v-else-if="!$v.user.username.minlength">!</span>
+                </md-field>
+              </div>
+
+              <div class="md-layout-item md-small-size-100">
+                <md-field md-has-password :class="getValidationClass('password')">
+                  <label for="password">Contraseña</label>
+                  <md-input
+                    name="password"
+                    id="password"
+                    autocomplete="family-name"
+                    v-model="user.password"
+                    type="password"
+                    :disabled="sending"
+                  />
+                  <span class="md-error" v-if="!$v.user.password.required">Ingrese contraseña</span>
+                  <span class="md-error" v-else-if="!$v.user.password.minlength">!</span>
+                </md-field>
+              </div>
+            </div>
+          </md-card-content>
+
+          <md-progress-bar md-mode="indeterminate" v-if="sending" />
+          <div class="actions md-layout md-alignment-center">
+            <md-button type="submit" class="md-raised md-primary primary" :disabled="sending">INGRESAR</md-button>
+          </div>
+        </form>
+        <div class="loading-overlay" v-if="loading">
+          <md-progress-spinner md-mode="indeterminate" :md-stroke="2"></md-progress-spinner>
         </div>
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
-            <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-            <span>Login</span>
-          </button>
-        </div>
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
-        </div>
-      </form>
+      </md-content>
     </div>
-  </div>
+  </mdb-container>
 </template>
 
 <script>
-import User from "../models/user";
+import { mdbContainer } from "mdbvue";
+import { validationMixin } from "vuelidate";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Login",
+  mixins: [validationMixin],
   data() {
     return {
-      user: new User("", ""),
+      user: {
+        username: null,
+        password: null
+      },
+      userSaved: false,
+      sending: false,
+      lastUser: null,
       loading: false,
       message: ""
     };
+  },
+  validations: {
+    user: {
+      username: {
+        required,
+        minLength: minLength(3)
+      },
+      password: {
+        required,
+        minLength: minLength(3)
+      }
+    }
+  },
+
+  components: {
+    mdbContainer
   },
   computed: {
     loggedIn() {
@@ -74,6 +102,26 @@ export default {
     }
   },
   methods: {
+    getValidationClass(fieldName) {
+      const field = this.$v.user[fieldName];
+
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty
+        };
+      }
+    },
+    clearForm() {
+      this.$v.$reset();
+      this.user.username = null;
+    },
+    validateUser() {
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        this.handleLogin();
+      }
+    },
     handleLogin() {
       this.loading = true;
       this.$validator.validateAll().then(isValid => {
@@ -102,37 +150,55 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  display: block;
-  margin-top: 10px;
+<style>
+.centered-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  margin-top: 40px;
 }
-
-.card-container.card {
-  max-width: 350px !important;
-  padding: 40px 40px;
+.centered-container .title {
+  text-align: center;
+  margin-bottom: 30px;
 }
-
-.card {
-  background-color: #f7f7f7;
-  padding: 20px 25px 30px;
-  margin: 0 auto 25px;
-  margin-top: 50px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+.centered-container .title img {
+  margin-bottom: 16px;
+  max-width: 80px;
 }
-
-.profile-img-card {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 10px;
-  display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
+.centered-container .actions .md-button {
+  margin: 0;
+}
+.centered-container .form {
+  margin-bottom: 60px;
+}
+.h-100 {
+  height: 100%;
+}
+.centered-container .md-content {
+  z-index: 1;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  border-radius: 10px;
+}
+.centered-container .loading-overlay {
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.md-elevation-3 {
+  box-shadow: 0 0 10px !important;
+  color: #00b6c2 !important;
 }
 </style>

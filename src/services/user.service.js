@@ -1,37 +1,13 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-const API_URL = 'https://backendis2.herokuapp.com/';
-//const API_URL = 'http://localhost:3000/';
+//const API_URL = 'https://backendis2.herokuapp.com/';
+const API_URL = 'http://localhost:3000/';
 
 class UserService {
-  getPublicContent() {
-    return axios.get(API_URL + 'all');
-  }
-
-  getUserBoard() {
-    return axios.get(API_URL + 'user', {
-      headers: authHeader()
-    });
-  }
-
-  getModeratorBoard() {
-    return axios.get(API_URL + 'mod', {
-      headers: authHeader()
-    });
-  }
-
-  getAdminBoard() {
-    return axios.get(API_URL + 'admin', {
-      headers: authHeader()
-    });
-  }
-
   deleteUser(id) {
-    return axios.delete(API_URL + 'deleteUser/' + id, {
-
-    }).then(response => {
-      return response.data
-    })
+    return axios.delete(API_URL + 'deleteUser/' + id, {}, {
+      headers: authHeader()
+    });
   }
 
   updateUser(user) {
@@ -42,14 +18,10 @@ class UserService {
         email: user.email,
         rol_id: user.rol_id,
         username: user.username,
-        password: user.password
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+        password: user.password,
+        proyecto_id: user.proyecto_id
+      }, {
+        headers: authHeader()
       });
   }
 
@@ -67,17 +39,12 @@ class UserService {
         email: user.email,
         rol_id: user.rol_id,
         username: user.username,
-        password: user.password
-      })
-      .then(response => {
-        //TODO CONSUMIR TOKEN DEL API Y UTILIZAR PARA LAS RUTAS
-        // if (response.data.accessToken) {
-        //   localStorage.setItem('user', JSON.stringify(response.data));
-        // }
-        return response.data;
+        password: user.password,
+        proyecto_id: user.proyecto_id
+      }, {
+        headers: authHeader()
       });
   }
-
 }
 
 export default new UserService();
