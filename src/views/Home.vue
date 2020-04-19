@@ -1,9 +1,13 @@
 <template>
+<div>
+  <NavBar></NavBar>
   <div class="container">
     <header class="jumbotron">
-      <h3> {{content}}</h3>
+      <h3>hola</h3>
     </header>
   </div>
+</div>
+  
 </template>
 
 <script>
@@ -15,19 +19,19 @@ export default {
     return {
       content: ''
     };
-  },
-  mounted() {
-    UserService.getPublicContent().then(
-      response => {
-        this.content = response.data;
-      },
-      error => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
   }
+  // mounted() {
+  //   UserService.getPublicContent().then(
+  //     response => {
+  //       this.content = response.data;
+  //     },
+  //     error => {
+  //       this.content =
+  //         (error.response && error.response.data) ||
+  //         error.message ||
+  //         error.toString();
+  //     }
+  //   );
+  // }
 };
 </script>

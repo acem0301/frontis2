@@ -12,6 +12,7 @@ import Vuex from 'vuex';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import NavBar from './components/Navbar.vue';
+import VSwitch from 'v-switch-case'
 
 import {
   faHome,
@@ -34,6 +35,7 @@ Vue.component('NavBar', NavBar);
 Vue.use(VueMaterial)
 
 Vue.use(Vuex);
+Vue.use(VSwitch);
 
 new Vue({
   router,
