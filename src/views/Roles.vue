@@ -27,6 +27,8 @@
                       :items="items"
                       :menu-props="{ maxHeight: '400' }"
                       label="Permisos"
+                      multiple
+                      hint="Añadir permisos"
                       persistent-hint
                     ></v-select>
                   </v-col>
@@ -45,7 +47,6 @@
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon small class="mr-2" @click="updateRol(item)">mdi-pencil</v-icon>
-      <v-icon small @click="deleteRol(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -69,7 +70,7 @@ export default {
           sortable: false,
           value: "descripcion"
         },
-        { text: "Acciones", value: "actions", sortable: false }
+        { text: "Acciones", align:"right", value: "actions", sortable: false }
       ],
       roles: [],
       editedIndex: -1,
