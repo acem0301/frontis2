@@ -125,7 +125,9 @@ export default {
           action: "las la-battery-three-quarters",
           title: "Configuración",
           route: "",
-          items: [{}]
+          items: [{
+            title:"Crear linea base", route:"/listTarea"
+          }]
         },
         {
           action: "mdi-clipboard-account",

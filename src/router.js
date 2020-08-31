@@ -47,7 +47,14 @@ export const router = new Router({
       name: 'listProjects',
       component: () => import('./views/Project.vue')
 
+    },
+    {
+      path: '/listTarea',
+      name: 'listTarea',
+      component: () => import('./views/Tarea.vue')
+
     }
+    
   ]
 });
 
