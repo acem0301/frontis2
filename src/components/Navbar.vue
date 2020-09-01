@@ -122,7 +122,7 @@ export default {
           ]
         },
         {
-          action: "las la-battery-three-quarters",
+          action: "mdi-cog-outline",
           title: "Configuración",
           route: "",
           items: [{
