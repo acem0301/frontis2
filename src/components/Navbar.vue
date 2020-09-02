@@ -8,13 +8,13 @@
       </v-btn>
     </v-toolbar>
     <v-navigation-drawer app v-model="drawer" class="dark">
-      <v-list v-if ="role == 'ADMINISTRADOR'">
+      <v-list v-if="role == 'ADMINISTRADOR'">
         <v-list-item :to="homeRoute">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Dashboard</v-list-item-title>
+        </v-list-item>
         <v-list-group
           v-for="item in adminItems"
           :key="item.title"
@@ -35,13 +35,13 @@
           </v-list-item>
         </v-list-group>
       </v-list>
-      <v-list v-else-if ="role == 'DESARROLLADOR'">
+      <v-list v-else-if="role == 'DESARROLLADOR'">
         <v-list-item :to="homeRoute">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Dashboard</v-list-item-title>
+        </v-list-item>
         <v-list-group
           v-for="item in desaItems"
           :key="item.title"
@@ -62,13 +62,13 @@
           </v-list-item>
         </v-list-group>
       </v-list>
-      <v-list v-else-if ="role == 'LIDER'">
+      <v-list v-else-if="role == 'LIDER'">
         <v-list-item :to="homeRoute">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Dashboard</v-list-item-title>
+        </v-list-item>
         <v-list-group
           v-for="item in desaItems"
           :key="item.title"
@@ -91,11 +91,11 @@
       </v-list>
       <v-list v-else>
         <v-list-item :to="homeRoute">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Dashboard</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <router-view />
@@ -118,15 +118,15 @@ export default {
           route: "",
           items: [
             { title: "Usuarios", route: "/listUsers" },
-            { title: "Roles", route: "/listRoles" }
-          ]
+            { title: "Roles", route: "/listRoles" },
+          ],
         },
         {
           action: "mdi-cog-outline",
           title: "Configuración",
           route: "",
           items: [
-            {title:"Crear linea base", route:"/listTarea"},
+            {title:"Crear linea base", route:"/listItemsLb"},
             {title:"Listado de líneas base", route:"/listBaselines"}
           ]
         },
@@ -136,31 +136,29 @@ export default {
           route: "",
           items: [
             { title: "Ítems", route: "/listItems" },
-            { title: "Proyectos", route: "/listProjects" }
-          ]
-        }
+            { title: "Proyectos", route: "/listProjects" },
+          ],
+        },
       ],
-          desaItems: [
+      desaItems: [
         {
           action: "mdi-clipboard-account",
           title: "Desarrollo",
           route: "",
-          items: [
-            { title: "Ítems", route: "/listItems" }
-          ]
-        }
+          items: [{ title: "Ítems", route: "/listItems" }],
+        },
       ],
-         liderItems: [
+      liderItems: [
         {
           action: "mdi-clipboard-account",
           title: "Desarrollo",
           route: "",
           items: [
             { title: "Ítems", route: "/listItems" },
-            { title: "Proyectos", route: "/listProjects" }
-          ]
-        }
-      ]
+            { title: "Proyectos", route: "/listProjects" },
+          ],
+        },
+      ],
     };
   },
   computed: {
@@ -168,27 +166,25 @@ export default {
       return this.$store.state.auth.user;
     },
     showAdminNavBar() {
-      console.log(this.currentUser.user_rol);
       if (this.currentUser && this.currentUser.user_rol) {
         if (this.currentUser.nombre_rol.toUpperCase() == "ADMINISTRADOR") {
           return true;
         }
       }
       return false;
-    }
-
+    },
   },
   methods: {
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
     },
-    userRole(){
+    userRole() {
       let user = this.$store.state.auth.user;
       console.log(user.nombre_rol.toUpperCase());
       return user.nombre_rol.toUpperCase();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

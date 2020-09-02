@@ -1,36 +1,21 @@
 <template>
-<div>
-  <NavBar></NavBar>
-  <div class="container">
-    <header class="jumbotron">
-    </header>
+  <div>
+    <NavBar></NavBar>
+    <div class="container">
+      <header class="jumbotron"></header>
+    </div>
   </div>
-</div>
-  
 </template>
 
 <script>
-import UserService from '../services/user.service';
+import UserService from "../services/user.service";
 
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {
-      content: ''
+      content: "",
     };
-  }
-  // mounted() {
-  //   UserService.getPublicContent().then(
-  //     response => {
-  //       this.content = response.data;
-  //     },
-  //     error => {
-  //       this.content =
-  //         (error.response && error.response.data) ||
-  //         error.message ||
-  //         error.toString();
-  //     }
-  //   );
-  // }
+  },
 };
 </script>
