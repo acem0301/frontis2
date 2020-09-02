@@ -53,8 +53,13 @@ export const router = new Router({
       name: 'listTarea',
       component: () => import('./views/Tarea.vue')
 
+    },
+    {
+      path: '/listBaselines',
+      name: 'listBaselines',
+      component: () => import('./views/ListBaselines.vue')
+
     }
-    
   ]
 });
 

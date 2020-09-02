@@ -125,9 +125,10 @@ export default {
           action: "mdi-cog-outline",
           title: "Configuración",
           route: "",
-          items: [{
-            title:"Crear linea base", route:"/listTarea"
-          }]
+          items: [
+            {title:"Crear linea base", route:"/listTarea"},
+            {title:"Listado de líneas base", route:"/listBaselines"}
+          ]
         },
         {
           action: "mdi-clipboard-account",
