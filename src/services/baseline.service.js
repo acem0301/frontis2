@@ -3,7 +3,7 @@ import authHeader from './auth-header';
 //const API_URL = 'https://backendis2.herokuapp.com/';
 const API_URL = 'http://localhost:3000/';
 
-class TareaService {
+class LineaBaseService {
 
   listItems() {
     return axios.get(API_URL + 'listItems', {
@@ -53,4 +53,4 @@ class TareaService {
   }
 }
 
-export default new TareaService();
+export default new LineaBaseService();

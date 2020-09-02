@@ -30,7 +30,7 @@ export const router = new Router({
     },
     {
       path: '/listRoles',
-      
+
       name: 'listRoles',
       // lazy-loaded
       component: () => import('./views/Roles.vue')
@@ -49,12 +49,12 @@ export const router = new Router({
 
     },
     {
-      path: '/listTarea',
-      name: 'listTarea',
-      component: () => import('./views/Tarea.vue')
+      path: '/listItemsLb',
+      name: 'listItemsLb',
+      component: () => import('./views/Baseline.vue')
 
     }
-    
+
   ]
 });
 
