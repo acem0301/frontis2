@@ -14,8 +14,8 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="700px">
-          <template v-slot:activator="{ on }">
-            <v-btn small color="primary" dark class="mb-2" v-on="on">Crear</v-btn>
+          <template v-slot:activator="{}">
+            <v-btn small color="primary" dark class="mb-2" >Crear</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -63,7 +63,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="crear">crear</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -78,8 +78,6 @@
 
 <script>
 import ItemService from "../services/item.service";
-import OtherServices from "../services/other.services";
-import Project from "../services/project.service";
 import Item from "../models/item";
 
 export default {
@@ -130,33 +128,7 @@ export default {
     };
   },
 
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Nuevo" : "Editar ítem";
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-  },
-
   methods: {
-    editItem(item) {
-      this.editedIndex = this.tareas.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-
     getItems() {
       ItemService.listItems().then(
         (response) => {
@@ -171,51 +143,13 @@ export default {
       );
     },
 
-    getPriorities() {
-      OtherServices.listPriorities().then(
-        (response) => {
-          this.priorities = response.data;
-        },
-        (error) => {
-          this.priorities =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-        }
-      );
-    },
-
-    getProjects() {
-      Project.listProjects().then(
-        (response) => {
-          this.projects = response.data;
-        },
-        (error) => {
-          this.projects =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-        }
-      );
-    },
-    guardar() {
-      if (this.editedIndex > -1) {
-        ItemService.updateItem(this.editedItem);
-      } else {
-        ItemService.createItem(this.editedItem);
-      }
-      this.close();
-    },
-
-    changeStateFinalize(item) {
-      ItemService.updateItemState(item.id);
+    crear() {
+      //TODO Hacer metodo que haga el post para creacion de LB
     },
   },
 
   mounted() {
     this.getItems();
-    this.getPriorities();
-    this.getProjects();
   },
 };
 </script>
