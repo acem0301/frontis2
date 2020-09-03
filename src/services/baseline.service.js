@@ -5,9 +5,11 @@ import itemService from './item.service';
 const API_URL = 'http://localhost:3000/';
 
 class LineaBaseService  {
-
-
-
+    listBaselines() {
+        return axios.get(API_URL + 'listBaselines', {
+          headers: authHeader()
+        });
+      }
 }
 
 export default new LineaBaseService();
