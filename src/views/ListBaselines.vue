@@ -8,7 +8,7 @@
     </v-row>
     <v-expansion-panels focusable v-for="item in baselines" :key="item.id">
       <v-expansion-panel>
-        <v-expansion-panel-header>{{item.nombre_lb}}</v-expansion-panel-header>
+        <v-expansion-panel-header>{{item.nombre_lb}} - {{item.nombre_proyecto}}</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-simple-table>
                 <template v-slot:default>
