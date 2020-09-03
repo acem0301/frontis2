@@ -69,12 +69,11 @@
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        v-if="item.estado !== 'Finalizado'"
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >mdi-pencil</v-icon>
+      <template v-if="item.pertenece_a_lb == null">
+        <template v-if="item.estado !=='Finalizado'">
+          <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+        </template>
+      </template>
     </template>
     <template v-slot:item.finalizar="{item}">
       <v-btn
@@ -102,7 +101,7 @@ export default {
           text: "Id ítem",
           align: "start",
           sortable: false,
-          value: "id"
+          value: "id",
         },
         { text: "Prioridad", value: "nombre_prioridad" },
         { text: "Estado", value: "estado" },
@@ -110,7 +109,7 @@ export default {
         { text: "Observación", value: "observacion" },
         { text: "Proyecto", value: "proyecto_nombre" },
         { text: "Acciones", value: "actions", sortable: false },
-        { text: "", value: "finalizar", sortable: false }
+        { text: "", value: "finalizar", sortable: false },
       ],
       tareas: [],
       states: [],
@@ -126,7 +125,7 @@ export default {
         observacion: "",
         proyecto_id: "",
         id_tarea_padre: "",
-        es_padre: false
+        es_padre: false,
       },
       defaultItem: {
         id: "",
@@ -137,21 +136,21 @@ export default {
         observacion: "",
         proyecto_id: "",
         id_tarea_padre: "",
-        es_padre: false
-      }
+        es_padre: false,
+      },
     };
   },
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Nuevo ítem" : "Editar ítem";
-    }
+    },
   },
 
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
 
   methods: {
@@ -177,10 +176,10 @@ export default {
 
     getItems() {
       ItemService.listItems().then(
-        response => {
+        (response) => {
           this.tareas = response.data;
         },
-        error => {
+        (error) => {
           this.tareas =
             (error.response && error.response.data) ||
             error.message ||
@@ -191,10 +190,10 @@ export default {
 
     getPriorities() {
       OtherServices.listPriorities().then(
-        response => {
+        (response) => {
           this.priorities = response.data;
         },
-        error => {
+        (error) => {
           this.priorities =
             (error.response && error.response.data) ||
             error.message ||
@@ -205,10 +204,10 @@ export default {
 
     getProjects() {
       Project.listProjects().then(
-        response => {
+        (response) => {
           this.projects = response.data;
         },
-        error => {
+        (error) => {
           this.projects =
             (error.response && error.response.data) ||
             error.message ||
@@ -227,13 +226,13 @@ export default {
 
     changeStateFinalize(item) {
       ItemService.updateItemState(item.id);
-    }
+    },
   },
 
   mounted() {
     this.getItems();
     this.getPriorities();
     this.getProjects();
-  }
+  },
 };
 </script>
