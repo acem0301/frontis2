@@ -6,6 +6,7 @@
           <NavBar></NavBar>
       </v-col>
     </v-row>
+     <Alert></Alert>
     <v-expansion-panels focusable v-for="item in baselines" :key="item.id">
       <v-expansion-panel>
         <v-expansion-panel-header>{{item.nombre_lb}} - {{item.nombre_proyecto}}</v-expansion-panel-header>
@@ -36,32 +37,37 @@
 
 <script>
 import LineaBaseService from "../services/baseline.service";
-import Baseline from "../models/baseline";
   export default {
     data() {
       return {
-        baselines: []
+        baselines: [],
+        show: true,
       };
-  },
-  methods: {
-    getBaselines() {
-      LineaBaseService.listBaselines().then(
-        response => {
-          this.baselines = response.data;
-        },
-        error => {
-          this.baselines =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-        }
-      );
-    }
-  },
+    },
+    methods: {
+      getBaselines() {
+        LineaBaseService.listBaselines().then(
+          response => {
+            this.baselines = response.data;
+          },
+          error => {
+            this.baselines =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
+      }
+    },
 
-  mounted() {
-    this.getBaselines();
-  }
+    mounted() {
+      this.getBaselines();
+    },
+    computed: {
+      show() {
+        return true;
+      }
+    }
   }
 </script>
  <style scoped>
