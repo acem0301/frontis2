@@ -70,7 +70,7 @@
           <v-list-item-title>Dashboard</v-list-item-title>
         </v-list-item>
         <v-list-group
-          v-for="item in desaItems"
+          v-for="item in liderItems"
           :key="item.title"
           :to="item.route"
           v-model="item.active"
@@ -126,7 +126,7 @@ export default {
           title: "Configuración",
           route: "",
           items: [
-            {title:"Crear linea base", route:"/listItemsLb"},
+            {title:"Crear línea base", route:"/listItemsLb"},
             {title:"Listado de líneas base", route:"/listBaselines"}
           ]
         },
@@ -146,7 +146,7 @@ export default {
           title: "Desarrollo",
           route: "",
           items: [{ title: "Ítems", route: "/listItems" }],
-        },
+        }
       ],
       liderItems: [
         {
@@ -158,6 +158,15 @@ export default {
             { title: "Proyectos", route: "/listProjects" },
           ],
         },
+        {
+          action: "mdi-cog-outline",
+          title: "Configuración",
+          route: "",
+          items: [
+            {title:"Crear línea base", route:"/listItemsLb"},
+            {title:"Listado de líneas base", route:"/listBaselines"}
+          ]
+        }
       ],
     };
   },
