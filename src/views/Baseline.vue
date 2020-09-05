@@ -14,8 +14,8 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="700px">
-          <template v-slot:activator="{}">
-            <v-btn small color="primary" dark class="mb-2">Crear</v-btn>
+          <template v-slot:activator="{ on }">
+            <v-btn small color="primary" dark class="mb-2" v-on="on">Crear</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -26,22 +26,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.descripcion" label="Observacion"></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.prioridad_id"
-                      :items="priorities"
-                      label="Prioridad"
-                      item-text="descripcion"
-                      item-value="id"
-                      hide-details
-                      single-line
-                    ></v-select>
+                    <v-text-field v-model="editedItem.nombre" label="Nombre de línea base"></v-text-field>
                   </v-col>
                   <div v-if="editedIndex === -1">
                     <v-col cols="12" sm="6" md="7">
@@ -56,6 +41,17 @@
                       ></v-select>
                     </v-col>
                   </div>
+                  <v-col cols="13" sm="6" md="4">
+                    <v-select
+                      v-model="editedItem.estado_id"
+                      :items="estados"
+                      label="Estado"
+                      item-text="descripcion"
+                      item-value="id"
+                      hide-details
+                      single-line
+                    ></v-select>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -63,7 +59,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="crear">crear</v-btn>
+              <v-btn color="blue darken-1" text @click="crear">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -71,13 +67,23 @@
     </template>
 
     <template v-slot:item.actions="{ item }">
-      <input type="checkbox" />
+      <input
+        v-model="editedItem.items_id"
+        :items="tareas"
+        item-value="id"
+        hide-details
+        single-line
+        type="checkbox"
+      />
     </template>
   </v-data-table>
 </template>
 
 <script>
 import ItemService from "../services/item.service";
+import Project from "../services/project.service";
+import OthersServices from "../services/other.services";
+import Baseline from "../services/baseline.service";
 import Item from "../models/item";
 
 export default {
@@ -105,30 +111,30 @@ export default {
       editedIndex: -1,
       editedItem: {
         id: "",
-        version: "",
-        prioridad_id: "",
-        estado_id: "",
-        descripcion: "",
-        observacion: "",
+        nombre: "",
         proyecto_id: "",
-        id_tarea_padre: "",
-        es_padre: false,
+        estado_id: "",
+        items_id: [],
       },
       defaultItem: {
         id: "",
-        version: "",
-        prioridad_id: "",
-        estado_id: "",
-        descripcion: "",
-        observacion: "",
+        nombre: "",
         proyecto_id: "",
-        id_tarea_padre: "",
-        es_padre: false,
+        estado_id: "",
+        items_id: [],
       },
     };
   },
 
   methods: {
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
     getItems() {
       ItemService.listItems().then(
         (response) => {
@@ -145,13 +151,43 @@ export default {
       );
     },
 
+    getProjects() {
+      Project.listProjects().then(
+        (response) => {
+          this.projects = response.data;
+        },
+        (error) => {
+          this.projects =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+    getEstados() {
+      let table_name = "Linea Base";
+      OthersServices.listStates(table_name).then(
+        (response) => {
+          this.estados = response.data;
+        },
+        (error) => {
+          this.estados =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
     crear() {
-      //TODO Hacer metodo que haga el post para creacion de LB
+      Baseline.createbaseline(this.editedItem);
+      this.close();
     },
   },
 
   mounted() {
     this.getItems();
+    this.getProjects();
+    this.getEstados();
   },
 };
 </script>
