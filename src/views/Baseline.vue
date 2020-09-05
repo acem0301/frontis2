@@ -15,7 +15,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="700px">
           <template v-slot:activator="{}">
-            <v-btn small color="primary" dark class="mb-2" >Crear</v-btn>
+            <v-btn small color="primary" dark class="mb-2">Crear</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -132,7 +132,9 @@ export default {
     getItems() {
       ItemService.listItems().then(
         (response) => {
-          this.tareas = response.data;
+          this.tareas = response.data.filter(
+            (value) => value.pertenece_a_lb == null
+          );
         },
         (error) => {
           this.tareas =
