@@ -12,6 +12,7 @@ import Vuex from 'vuex';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import NavBar from './components/Navbar.vue';
+import Alert from './components/Alert.vue';
 import VSwitch from 'v-switch-case'
 
 import {
@@ -32,6 +33,7 @@ Vue.config.productionTip = false;
 Vue.use(VeeValidate);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('NavBar', NavBar);
+Vue.component('Alert', Alert);
 Vue.use(VueMaterial)
 
 Vue.use(Vuex);

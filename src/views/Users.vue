@@ -1,93 +1,101 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="items"
-    :hola="desserts"
-    sort-by="desserts.id"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <NavBar></NavBar>
-      <v-toolbar flat color="white">
-        <v-toolbar-title>Lista de Usuarios</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on }">
-            <v-btn small color="primary" dark class="mb-2" v-on="on">Agregar</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
+  <div>
+    <NavBar></NavBar>
+    <v-row>
+      <v-col>
+        <v-alert v-if="showAlert" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+      </v-col>
+    </v-row>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :hola="desserts"
+      sort-by="desserts.id"
+      class="elevation-1"
+    >
+      <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-toolbar-title>Lista de Usuarios</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="500px">
+            <template v-slot:activator="{ on }">
+              <v-btn small color="primary" dark class="mb-2" v-on="on">Agregar</v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.apellido" label="Apellido"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="5">
-                    <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
-                  </v-col>
-                  <div v-if="editedIndex === -1">
-                    <v-col cols="12" sm="6" md="8">
-                      <v-text-field
-                        v-model="editedItem.password"
-                        type="password"
-                        label="Contraseña"
-                      ></v-text-field>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
                     </v-col>
-                  </div>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.rol_id"
-                      :items="roles"
-                      label="Rol"
-                      item-text="descripcion"
-                      item-value="id"
-                      hide-details
-                      single-line
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.proyecto_id"
-                      :items="proyecto"
-                      label="Proyecto"
-                      item-text="nombre"
-                      item-value="id"
-                      hide-details
-                      single-line
-                    ></v-select>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.apellido" label="Apellido"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="5">
+                      <v-text-field v-model="editedItem.username" label="Nombre de Usuario"></v-text-field>
+                    </v-col>
+                    <div v-if="editedIndex === -1">
+                      <v-col cols="12" sm="6" md="8">
+                        <v-text-field
+                          v-model="editedItem.password"
+                          type="password"
+                          label="Contraseña"
+                        ></v-text-field>
+                      </v-col>
+                    </div>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-select
+                        v-model="editedItem.rol_id"
+                        :items="roles"
+                        label="Rol"
+                        item-text="descripcion"
+                        item-value="id"
+                        hide-details
+                        single-line
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-select
+                        v-model="editedItem.proyecto_id"
+                        :items="proyecto"
+                        label="Proyecto"
+                        item-text="nombre"
+                        item-value="id"
+                        hide-details
+                        single-line
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2" @click="updateUsuario(item)">mdi-pencil</v-icon>
-      <v-icon small @click="eliminar(item)">mdi-delete</v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
-    </template>
-  </v-data-table>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
+                <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon small class="mr-2" @click="updateUsuario(item)">mdi-pencil</v-icon>
+        <v-icon small @click="eliminar(item)">mdi-delete</v-icon>
+      </template>
+      <template v-slot:no-data>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 
@@ -138,7 +146,9 @@ export default {
         password: "",
         rol_id: "",
         proyecto_id: ""
-      }
+      },
+      showAlert: false,
+      alertMsg: ''
     };
   },
 
@@ -181,6 +191,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message;  
+            this.showAlert = true;
         }
       );
     },
@@ -194,6 +206,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message;  
+            this.showAlert = true;
         }
       );
     },
@@ -207,6 +221,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message;  
+            this.showAlert = true;
         }
       );
     },
@@ -226,7 +242,7 @@ export default {
     },
 
     eliminar(item) {
-      if (confirm("Are you sure you want to delete this item?")) {
+      if (confirm("¿Seguro que quiere eliminar este ítem?")) {
         this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
         UserService.deleteUser(this.editedItem.id);

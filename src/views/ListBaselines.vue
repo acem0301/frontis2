@@ -3,12 +3,15 @@
   <div>
     <v-row>
       <v-col>
-          <NavBar></NavBar>
+        <NavBar></NavBar>
       </v-col>
     </v-row>
+     <v-alert v-if="showAlert" dense outlined type="error">
+      {{alertMsg}}
+    </v-alert>
     <v-expansion-panels focusable v-for="item in baselines" :key="item.id">
       <v-expansion-panel>
-        <v-expansion-panel-header>{{item.nombre_lb}}</v-expansion-panel-header>
+        <v-expansion-panel-header>{{item.nombre_lb}} - {{item.nombre_proyecto}}</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-simple-table>
                 <template v-slot:default>
@@ -34,35 +37,41 @@
   </div>
 </template>
 
+
 <script>
 import LineaBaseService from "../services/baseline.service";
-import Baseline from "../models/baseline";
+import Vue from 'vue';
   export default {
     data() {
       return {
-        baselines: []
+        baselines: [],
+        showAlert: false,
+        alertMsg: ''
       };
-  },
-  methods: {
-    getBaselines() {
-      LineaBaseService.listBaselines().then(
-        response => {
-          this.baselines = response.data;
-        },
-        error => {
-          this.baselines =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-        }
-      );
-    }
-  },
+    },
+    methods: {
+      getBaselines() {
+        LineaBaseService.listBaselines().then(
+          response => {
+            this.baselines = response.data;
+          },
+          error => {
+            this.baselines =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+            this.alertMsg = error.response.data.message;    
+            this.showAlert = true;
+          }
+        );
+      }
+    },
 
-  mounted() {
-    this.getBaselines();
+    mounted() {
+      this.getBaselines();
+    },
   }
-  }
+  
 </script>
  <style scoped>
     .v-data-table
