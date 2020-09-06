@@ -14,7 +14,6 @@
       class="elevation-1"
     >
       <template v-slot:top>
-        <NavBar></NavBar>
         <v-toolbar flat color="white">
           <v-toolbar-title>Lista de Ítems</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
@@ -37,10 +36,10 @@
                     <div v-if="editedIndex === -1">
                       <v-col cols="12" sm="6" md="7">
                         <v-select
-                          v-model="editedItem.prioridad_id"
-                          :items="priorities"
-                          label="Prioridad"
-                          item-text="descripcion"
+                          v-model="editedItem.proyecto_id"
+                          :items="projects"
+                          label="Proyecto"
+                          item-text="nombre"
                           item-value="id"
                           hide-details
                           single-line
@@ -142,7 +141,7 @@ export default {
       if (checked) {
         this.editedItem.items_id.push(item.id);
       } else {
-        this.deleteItemArray(this.editedItem.items_id, item);
+        this.deleteItemArray(this.editedItem.items_id, item.id);
       }
       console.log(this.editedItem.items_id);
       console.log(this.checkedCategories, e);
