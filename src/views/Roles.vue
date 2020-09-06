@@ -1,9 +1,12 @@
 <template>
   <div>
     <NavBar></NavBar>
-    <v-row>
-      <v-col>
-        <v-alert v-if="showAlert" dense outlined type="error">
+    <v-row justify="center">
+      <v-col cols="11" >
+        <v-alert v-if="showAlertError" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+        <v-alert v-if="showAlertSuccess" dense outlined type="success">
           {{alertMsg}}
         </v-alert>
       </v-col>
@@ -99,7 +102,8 @@ export default {
         "Editar rol",
         "Eliminar rol"
       ],
-      showAlert: false,
+      showAlertError: false,
+      showAlertSuccess: false,
       alertMsg: ''
     };
   },
@@ -140,15 +144,41 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-
-    guardar() {
+     guardar() {
       if (this.editedIndex > -1) {
-        RolService.updateRol(this.editedItem);
+        RolService.updateRol(this.editedItem).then(
+          response => {
+            this.alertMsg = "Edición Exitosa"; 
+            this.showAlertSuccess = true;
+            this.getRoles();
+            setTimeout(() => {
+              this.showAlertSuccess = false;
+            }, 5000);
+          },
+          error => {
+            this.alertMsg = error.response.data.message;  
+            this.showAlertError = true;
+        }
+        )
       } else {
-        RolService.createRol(this.editedItem);
+        RolService.createRol(this.editedItem).then(
+          response => {
+            this.alertMsg = "Creación Exitosa";  
+            this.showAlertSuccess = true;
+            this.getRoles();
+            setTimeout(() => {
+              this.showAlertSuccess = false;
+            }, 5000);
+          },
+          error => {
+            this.alertMsg = error.response.data.message;  
+            this.showAlertError = true;
+        }
+        )
       }
       this.close();
     },
+    
     updateRol(item) {
       this.editedIndex = this.roles.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -161,24 +191,25 @@ export default {
         this.editedItem = Object.assign({}, item);
         RolService.deleteRol(this.editedItem.id);
       }
-    }
-  },
-  mounted() {
-    let vue = this;
-    RolService.listRoles().then(
+    },
+    getRoles() {
+      RolService.listRoles().then(
       response => {
-        vue.roles = response.data;
+        this.roles = response.data;
       },
       error => {
-        this.desserts =
+        this.roles =
           (error.response && error.response.data) ||
           error.message ||
           error.toString();
           this.alertMsg = error.response.data.message;  
-          this.showAlert = true;
+          this.showAlertError = true;
       }
     );
-    this.crearRol();
+    }
+  },
+  mounted() {
+    this.getRoles();
   }
 };
 </script>

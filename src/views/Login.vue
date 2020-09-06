@@ -1,8 +1,11 @@
 <template>
   <mdb-container>
-    <v-row>
-      <v-col>
-        <v-alert v-if="showAlert" dense outlined type="error">
+    <v-row justify="center">
+      <v-col cols="11" >
+        <v-alert v-if="showAlertError" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+        <v-alert v-if="showAlertSuccess" dense outlined type="success">
           {{alertMsg}}
         </v-alert>
       </v-col>
@@ -80,7 +83,8 @@ export default {
       lastUser: null,
       loading: false,
       message: "",
-      showAlert: false,
+      showAlertError: false,
+      showAlertSuccess: false,
       alertMsg: ''
     };
   },
@@ -151,7 +155,7 @@ export default {
                 error.message ||
                 error.toString();
                 this.alertMsg = error.response.data.error;  
-                this.showAlert = true;
+                this.showAlertError = true;
             }
           );
         }

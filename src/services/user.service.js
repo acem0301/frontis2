@@ -5,7 +5,7 @@ const API_URL = 'http://localhost:3000/';
 
 class UserService {
   deleteUser(id) {
-    return axios.delete(API_URL + 'deleteUser/' + id, {}, {
+    return axios.delete(API_URL + 'deleteUser/' + id, {
       headers: authHeader()
     });
   }

@@ -1,9 +1,12 @@
 <template>
   <div>
     <NavBar></NavBar>
-    <v-row>
-      <v-col>
-        <v-alert v-if="showAlert" dense outlined type="error">
+    <v-row justify="center">
+      <v-col cols="11" >
+        <v-alert v-if="showAlertError" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+        <v-alert v-if="showAlertSuccess" dense outlined type="success">
           {{alertMsg}}
         </v-alert>
       </v-col>
@@ -147,7 +150,8 @@ export default {
         rol_id: "",
         proyecto_id: ""
       },
-      showAlert: false,
+      showAlertError: false,
+      showAlertSuccess: false,
       alertMsg: ''
     };
   },
@@ -192,7 +196,7 @@ export default {
             error.message ||
             error.toString();
             this.alertMsg = error.response.data.message;  
-            this.showAlert = true;
+            this.showAlertError = true;
         }
       );
     },
@@ -207,7 +211,7 @@ export default {
             error.message ||
             error.toString();
             this.alertMsg = error.response.data.message;  
-            this.showAlert = true;
+            this.showAlertError = true;
         }
       );
     },
@@ -222,15 +226,41 @@ export default {
             error.message ||
             error.toString();
             this.alertMsg = error.response.data.message;  
-            this.showAlert = true;
+            this.showAlertError = true;
         }
       );
     },
-    guardar() {
+     guardar() {
       if (this.editedIndex > -1) {
-        UserService.updateUser(this.editedItem);
+         UserService.updateUser(this.editedItem).then(
+          response => {
+            this.alertMsg = "Edición Exitosa"; 
+            this.showAlertSuccess = true;
+            this.getUsuarios();
+            setTimeout(() => {
+              this.showAlertSuccess = false;
+            }, 5000);
+          },
+          error => {
+            this.alertMsg = error.response.data.message;  
+            this.showAlertError = true;
+        }
+        )
       } else {
-        UserService.createUser(this.editedItem);
+        UserService.createUser(this.editedItem).then(
+          response => {
+            this.alertMsg = "Creación Exitosa";  
+            this.showAlertSuccess = true;
+            this.getUsuarios();
+            setTimeout(() => {
+              this.showAlertSuccess = false;
+            }, 5000);
+          },
+          error => {
+            this.alertMsg = error.response.data.message;  
+            this.showAlertError = true;
+        }
+        )
       }
       this.close();
     },
@@ -242,10 +272,23 @@ export default {
     },
 
     eliminar(item) {
-      if (confirm("¿Seguro que quiere eliminar este ítem?")) {
+      if (confirm("¿Seguro que quiere eliminar este usuario?")) {
         this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
-        UserService.deleteUser(this.editedItem.id);
+        UserService.deleteUser(this.editedItem.id).then(
+          response => {
+            this.alertMsg = "Eliminación Exitosa";  
+            this.showAlertSuccess = true;
+            this.getUsuarios();
+            setTimeout(() => {
+              this.showAlertSuccess = false;
+            }, 5000);
+          },
+          error => {
+            this.alertMsg = error.response.data.message;  
+            this.showAlertError = true;
+          }
+        )
       } 
     }
   },
