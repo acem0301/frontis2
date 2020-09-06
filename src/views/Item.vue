@@ -236,7 +236,16 @@ export default {
       if (this.editedIndex > -1) {
         ItemService.updateItem(this.editedItem);
       } else {
-        ItemService.createItem(this.editedItem);
+        ItemService.createItem(this.editedItem).then(
+          response => {
+            this.alertMsg = response.data.message;  
+            this.showAlert = true;
+          },
+          error => {
+            this.alertMsg = error.response.data.message;  
+            this.showAlert = true;
+        }
+        )
       }
       this.close();
     },
