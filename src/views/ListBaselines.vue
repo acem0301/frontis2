@@ -40,7 +40,6 @@
 
 <script>
 import LineaBaseService from "../services/baseline.service";
-import Vue from 'vue';
   export default {
     data() {
       return {

@@ -195,7 +195,7 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
-            this.alertMsg = error.response.data.message;  
+            this.alertMsg = error.response.data.message;
             this.showAlert = true;
         }
       );
@@ -211,7 +211,7 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
-            this.alertMsg = error.response.data.message;   
+            this.alertMsg = error.response.data.message;
             this.showAlert = true;
         }
       );

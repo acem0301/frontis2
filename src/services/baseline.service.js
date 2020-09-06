@@ -9,6 +9,17 @@ class LineaBaseService  {
           headers: authHeader()
         });
       }
+
+      createbaseline(baseline) {
+        return axios
+          .post(API_URL + 'createBaselines/' + baseline.proyecto_id, {
+            nombre: baseline.nombre,
+            items: baseline.items_id,
+            estado_id: baseline.estado_id
+          }, {
+            headers: authHeader()
+          });
+      }
 }
 
 export default new LineaBaseService();
