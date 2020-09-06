@@ -67,14 +67,9 @@
     </template>
 
     <template v-slot:item.actions="{ item }">
-      <input
-        v-model="editedItem.items_id"
-        :items="tareas"
-        item-value="id"
-        hide-details
-        single-line
-        type="checkbox"
-      />
+      <v-container fluid>
+        <v-checkbox v-model="checked" @change="check($event, checked, item)"></v-checkbox>
+      </v-container>
     </template>
   </v-data-table>
 </template>
@@ -84,13 +79,12 @@ import ItemService from "../services/item.service";
 import Project from "../services/project.service";
 import OthersServices from "../services/other.services";
 import Baseline from "../services/baseline.service";
-import Item from "../models/item";
 
 export default {
   data() {
     return {
       dialog: false,
-      item: new Item(),
+      selected: [],
       headers: [
         {
           text: "Id ítem",
@@ -106,7 +100,6 @@ export default {
       ],
       tareas: [],
       states: [],
-      priorities: [],
       projects: [],
       editedIndex: -1,
       editedItem: {
@@ -133,6 +126,25 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
+    },
+
+    check: function (e, checked, item) {
+      console.log(item);
+      if (checked) {
+        this.editedItem.items_id.push(item.id);
+      } else {
+        this.deleteItemArray(this.editedItem.items_id, item);
+      }
+      console.log(this.editedItem.items_id);
+      console.log(this.checkedCategories, e);
+    },
+
+    deleteItemArray(arr, item) {
+      let i = arr.indexOf(item);
+
+      if (i !== -1) {
+        arr.splice(i, 1);
+      }
     },
 
     getItems() {
