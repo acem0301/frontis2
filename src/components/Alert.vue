@@ -24,9 +24,9 @@
       dense
       outlined
       type="error"
-      v-if="show"
     >
-      I'm a dense alert with the <strong>outlined</strong> prop and a <strong>type</strong> of error
+    
+      <!-- I'm a dense alert with the <strong>outlined</strong> prop and a <strong>type</strong> of error -->
     </v-alert>
   </div>
 </template>

@@ -1,5 +1,12 @@
 <template>
   <mdb-container>
+    <v-row>
+      <v-col>
+        <v-alert v-if="showAlert" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+      </v-col>
+    </v-row>
     <div class="centered-container h-100">
       <md-content class="md-elevation-3">
         <div class="title">
@@ -72,7 +79,9 @@ export default {
       sending: false,
       lastUser: null,
       loading: false,
-      message: ""
+      message: "",
+      showAlert: false,
+      alertMsg: ''
     };
   },
   validations: {
@@ -141,6 +150,8 @@ export default {
                 (error.response && error.response.data) ||
                 error.message ||
                 error.toString();
+                this.alertMsg = error.response.data.error;  
+                this.showAlert = true;
             }
           );
         }

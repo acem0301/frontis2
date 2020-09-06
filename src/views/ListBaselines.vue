@@ -3,10 +3,12 @@
   <div>
     <v-row>
       <v-col>
-          <NavBar></NavBar>
+        <NavBar></NavBar>
       </v-col>
     </v-row>
-     <Alert></Alert>
+     <v-alert v-if="showAlert" dense outlined type="error">
+      {{alertMsg}}
+    </v-alert>
     <v-expansion-panels focusable v-for="item in baselines" :key="item.id">
       <v-expansion-panel>
         <v-expansion-panel-header>{{item.nombre_lb}} - {{item.nombre_proyecto}}</v-expansion-panel-header>
@@ -35,13 +37,16 @@
   </div>
 </template>
 
+
 <script>
 import LineaBaseService from "../services/baseline.service";
+import Vue from 'vue';
   export default {
     data() {
       return {
         baselines: [],
-        show: true,
+        showAlert: false,
+        alertMsg: ''
       };
     },
     methods: {
@@ -55,6 +60,8 @@ import LineaBaseService from "../services/baseline.service";
               (error.response && error.response.data) ||
               error.message ||
               error.toString();
+            this.alertMsg = error.response.data.message;    
+            this.showAlert = true;
           }
         );
       }
@@ -63,12 +70,8 @@ import LineaBaseService from "../services/baseline.service";
     mounted() {
       this.getBaselines();
     },
-    computed: {
-      show() {
-        return true;
-      }
-    }
   }
+  
 </script>
  <style scoped>
     .v-data-table

@@ -1,89 +1,98 @@
 
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="tareas"
-    :states="states"
-    sort-by="calories"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <NavBar></NavBar>
-      <v-toolbar flat color="white">
-        <v-toolbar-title>Lista de ítems</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="700px">
-          <template v-slot:activator="{ on }">
-            <v-btn small color="primary" dark class="mb-2" v-on="on">Agregar</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
+  <div>
+    <NavBar></NavBar>
+    <v-row>
+      <v-col>
+        <v-alert v-if="showAlert" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+      </v-col>
+    </v-row>
+    <v-data-table
+      :headers="headers"
+      :items="tareas"
+      :states="states"
+      sort-by="calories"
+      class="elevation-1"
+    >
+      <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-toolbar-title>Lista de ítems</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="700px">
+            <template v-slot:activator="{ on }">
+              <v-btn small color="primary" dark class="mb-2" v-on="on">Agregar</v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.observacion" label="Observación"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.prioridad_id"
-                      :items="priorities"
-                      label="Prioridad"
-                      item-text="descripcion"
-                      item-value="id"
-                      hide-details
-                      single-line
-                    ></v-select>
-                  </v-col>
-                  <div v-if="editedIndex === -1">
-                    <v-col cols="12" sm="6" md="7">
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.observacion" label="Observación"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
                       <v-select
-                        v-model="editedItem.proyecto_id"
-                        :items="projects"
-                        label="Proyecto"
-                        item-text="nombre"
+                        v-model="editedItem.prioridad_id"
+                        :items="priorities"
+                        label="Prioridad"
+                        item-text="descripcion"
                         item-value="id"
                         hide-details
                         single-line
                       ></v-select>
                     </v-col>
-                  </div>
-                </v-row>
-              </v-container>
-            </v-card-text>
+                    <div v-if="editedIndex === -1">
+                      <v-col cols="12" sm="6" md="7">
+                        <v-select
+                          v-model="editedItem.proyecto_id"
+                          :items="projects"
+                          label="Proyecto"
+                          item-text="nombre"
+                          item-value="id"
+                          hide-details
+                          single-line
+                        ></v-select>
+                      </v-col>
+                    </div>
+                  </v-row>
+                </v-container>
+              </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.actions="{ item }">
-      <template v-if="item.pertenece_a_lb == null">
-        <template v-if="item.estado !=='Finalizado'">
-          <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
+                <v-btn color="blue darken-1" text @click="guardar">Guardar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <template v-if="item.pertenece_a_lb == null">
+          <template v-if="item.estado !=='Finalizado'">
+            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+          </template>
         </template>
       </template>
-    </template>
-    <template v-slot:item.finalizar="{item}">
-      <v-btn
-        v-if="item.estado == 'Iniciado'"
-        small
-        color="primary"
-        @click="changeStateFinalize(item)"
-      >Finalizar</v-btn>
-    </template>
-  </v-data-table>
+      <template v-slot:item.finalizar="{item}">
+        <v-btn
+          v-if="item.estado == 'Iniciado'"
+          small
+          color="primary"
+          @click="changeStateFinalize(item)"
+        >Finalizar</v-btn>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -138,6 +147,8 @@ export default {
         id_tarea_padre: "",
         es_padre: false,
       },
+      showAlert: false,
+      alertMsg: ''
     };
   },
 
@@ -184,6 +195,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message;  
+            this.showAlert = true;
         }
       );
     },
@@ -198,6 +211,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message;   
+            this.showAlert = true;
         }
       );
     },
@@ -212,6 +227,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message; 
+            this.showAlert = true;
         }
       );
     },

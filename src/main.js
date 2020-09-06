@@ -12,7 +12,7 @@ import Vuex from 'vuex';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import NavBar from './components/Navbar.vue';
-import Alert from './components/Alerts.vue';
+import Alert from './components/Alert.vue';
 import VSwitch from 'v-switch-case'
 
 import {
