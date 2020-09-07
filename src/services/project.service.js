@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-//const API_URL = 'https://backendis2.herokuapp.com/';
-const API_URL = 'http://localhost:3000/';
+const API_URL = 'https://backendis2.herokuapp.com/';
+//const API_URL = 'http://localhost:3000/';
 
 class ProjectService {
 
@@ -17,16 +17,13 @@ class ProjectService {
         nombre: project.nombre,
         descripcion: project.descripcion,
         estado_id: project.estado_id
-      },
-      {
+      }, {
         headers: authHeader()
       });
   }
 
   deleteProject(id) {
-    return axios.delete(API_URL + 'deleteProject/' + id, {
-    },
-    {
+    return axios.delete(API_URL + 'deleteProject/' + id, {}, {
       headers: authHeader()
     });
   }
@@ -37,8 +34,7 @@ class ProjectService {
         nombre: project.nombre,
         descripcion: project.descripcion,
         estado_id: project.estado_id
-      },
-      {
+      }, {
         headers: authHeader()
       });
   }
