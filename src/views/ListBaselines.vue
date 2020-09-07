@@ -14,7 +14,7 @@
     </v-row>
     <v-expansion-panels focusable v-for="item in baselines" :key="item.id">
       <v-expansion-panel>
-        <v-expansion-panel-header>{{item.nombre_lb}} - {{item.nombre_proyecto}}</v-expansion-panel-header>
+        <v-expansion-panel-header>{{item[0].nombre_lb}} - {{item[0].nombre_proyecto}}</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-simple-table>
                 <template v-slot:default>
@@ -26,11 +26,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                    <td>{{ item.prioridad }}</td>
-                    <td>{{ item.estado }}</td>
-                    <td>{{ item.descripcion }}</td>
+                  <template v-for="subItem in item">
+                      <tr>
+                        <td>{{ subItem.prioridad }}</td>
+                        <td>{{ subItem.estado }}</td>
+                        <td>{{ subItem.descripcion }}</td>
                     </tr>
+                  </template>
+                    
                 </tbody>
                 </template>
             </v-simple-table>
