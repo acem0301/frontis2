@@ -1,14 +1,17 @@
 
 <template>
   <div>
-    <v-row>
-      <v-col>
-        <NavBar></NavBar>
+    <NavBar></NavBar>
+    <v-row justify="center">
+      <v-col cols="11" >
+        <v-alert v-if="showAlertError" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+        <v-alert v-if="showAlertSuccess" dense outlined type="success">
+          {{alertMsg}}
+        </v-alert>
       </v-col>
     </v-row>
-     <v-alert v-if="showAlert" dense outlined type="error">
-      {{alertMsg}}
-    </v-alert>
     <v-expansion-panels focusable v-for="item in baselines" :key="item.id">
       <v-expansion-panel>
         <v-expansion-panel-header>{{item.nombre_lb}} - {{item.nombre_proyecto}}</v-expansion-panel-header>
@@ -44,7 +47,8 @@ import LineaBaseService from "../services/baseline.service";
     data() {
       return {
         baselines: [],
-        showAlert: false,
+        showAlertError: false,
+        showAlertSuccess: false,
         alertMsg: ''
       };
     },
@@ -60,7 +64,7 @@ import LineaBaseService from "../services/baseline.service";
               error.message ||
               error.toString();
             this.alertMsg = error.response.data.message;    
-            this.showAlert = true;
+            this.showAlertError = true;
           }
         );
       }

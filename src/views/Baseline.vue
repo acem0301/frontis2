@@ -1,9 +1,14 @@
 <template>
   <div>
     <NavBar></NavBar>
-    <v-row>
-      <v-col>
-        <v-alert v-if="showAlert" dense outlined type="error">{{alertMsg}}</v-alert>
+    <v-row justify="center">
+      <v-col cols="11" >
+        <v-alert v-if="showAlertError" dense outlined type="error">
+          {{alertMsg}}
+        </v-alert>
+        <v-alert v-if="showAlertSuccess" dense outlined type="success">
+          {{alertMsg}}
+        </v-alert>
       </v-col>
     </v-row>
     <v-data-table
@@ -122,7 +127,8 @@ export default {
         estado_id: "",
         items_id: [],
       },
-      showAlert: false,
+      showAlertError: false,
+      showAlertSuccess: false,
       alertMsg: "",
     };
   },
@@ -168,7 +174,7 @@ export default {
             error.message ||
             error.toString();
           this.alertMsg = error.response.data.message;
-          this.showAlert = true;
+          this.showAlertError = true;
         }
       );
     },
@@ -183,6 +189,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message;
+            this.showAlertError = true;
         }
       );
     },
@@ -197,11 +205,26 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
+            this.alertMsg = error.response.data.message;
+            this.showAlertError = true;
         }
       );
     },
     crear() {
-      Baseline.createbaseline(this.editedItem);
+      Baseline.createbaseline(this.editedItem).then (
+        response => {
+          this.alertMsg = "Creación Exitosa"; 
+          this.showAlertSuccess = true;
+          this.getItems();
+          setTimeout(() => {
+            this.showAlertSuccess = false;
+          }, 5000);
+        },
+        error => {
+          this.alertMsg = error.response.data.message;  
+          this.showAlertError = true;
+        }
+      )
       this.close();
     },
   },
