@@ -1,8 +1,8 @@
 import axios from 'axios';
 import md5 from 'js-md5';
-import constant from '../constant/constant';
+import constant from "../constant/constant";
 
-const API_URL = constant.API_URL
+const API_URL = constant.API_URL;
 class AuthService {
   login(user) {
     return axios

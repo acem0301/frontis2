@@ -3,6 +3,7 @@ import authHeader from './auth-header';
 import constant from '../constant/constant';
 
 const API_URL = constant.API_URL;
+
 class RolService {
   getPublicContent() {
     return axios.get(API_URL + 'all');

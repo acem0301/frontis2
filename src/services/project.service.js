@@ -2,7 +2,7 @@ import axios from 'axios';
 import authHeader from './auth-header';
 import constant from '../constant/constant';
 
-const API_URL = constant.API_URL
+const API_URL = constant.API_URL;
 
 class ProjectService {
 
