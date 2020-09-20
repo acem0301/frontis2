@@ -3,13 +3,9 @@
   <div>
     <NavBar></NavBar>
     <v-row justify="center">
-      <v-col cols="11" >
-        <v-alert v-if="showAlertError" dense outlined type="error">
-          {{alertMsg}}
-        </v-alert>
-        <v-alert v-if="showAlertSuccess" dense outlined type="success">
-          {{alertMsg}}
-        </v-alert>
+      <v-col cols="11">
+        <v-alert v-if="showAlertError" dense outlined type="error">{{alertMsg}}</v-alert>
+        <v-alert v-if="showAlertSuccess" dense outlined type="success">{{alertMsg}}</v-alert>
       </v-col>
     </v-row>
     <v-data-table
@@ -38,6 +34,9 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.descripcion" label="Descripción"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.version" label="Version"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.observacion" label="Observación"></v-text-field>
@@ -152,7 +151,7 @@ export default {
       },
       showAlertError: false,
       showAlertSuccess: false,
-      alertMsg: ''
+      alertMsg: "",
     };
   },
 
@@ -199,8 +198,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
-            this.alertMsg = error.response.data.message;
-            this.showAlertError = true;
+          this.alertMsg = error.response.data.message;
+          this.showAlertError = true;
         }
       );
     },
@@ -215,8 +214,8 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
-            this.alertMsg = error.response.data.message;
-            this.showAlertError = true;
+          this.alertMsg = error.response.data.message;
+          this.showAlertError = true;
         }
       );
     },
@@ -231,42 +230,42 @@ export default {
             (error.response && error.response.data) ||
             error.message ||
             error.toString();
-            this.alertMsg = error.response.data.message; 
-            this.showAlertError = true;
+          this.alertMsg = error.response.data.message;
+          this.showAlertError = true;
         }
       );
     },
     guardar() {
       if (this.editedIndex > -1) {
         ItemService.updateItem(this.editedItem).then(
-          response => {
-            this.alertMsg = "Edición Exitosa"; 
+          (response) => {
+            this.alertMsg = "Edición Exitosa";
             this.showAlertSuccess = true;
             this.getItems();
             setTimeout(() => {
               this.showAlertSuccess = false;
             }, 5000);
           },
-          error => {
-            this.alertMsg = error.response.data.message;  
+          (error) => {
+            this.alertMsg = error.response.data.message;
             this.showAlertError = true;
           }
-        )
+        );
       } else {
         ItemService.createItem(this.editedItem).then(
-          response => {
-            this.alertMsg = "Creación Exitosa";  
+          (response) => {
+            this.alertMsg = "Creación Exitosa";
             this.showAlertSuccess = true;
             this.getItems();
             setTimeout(() => {
               this.showAlertSuccess = false;
             }, 5000);
           },
-          error => {
-            this.alertMsg = error.response.data.message;  
+          (error) => {
+            this.alertMsg = error.response.data.message;
             this.showAlertError = true;
-        }
-        )
+          }
+        );
       }
       this.close();
     },

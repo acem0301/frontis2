@@ -14,7 +14,7 @@ class ItemService {
   createItem(item) {
     return axios
       .post(API_URL + 'createItem/' + item.proyecto_id, {
-        version: '1',
+        version: item.version,
         prioridad_id: item.prioridad_id,
         descripcion: item.descripcion,
         observacion: item.observacion
