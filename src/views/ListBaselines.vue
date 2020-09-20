@@ -19,6 +19,7 @@
                   <th class="text-left">Prioridad</th>
                   <th class="text-left">Estado</th>
                   <th class="text-left">Descripción</th>
+                  <th class="text-left">Versión</th>
                 </tr>
               </thead>
               <tbody>
@@ -27,6 +28,7 @@
                     <td>{{ subItem.prioridad }}</td>
                     <td>{{ subItem.estado }}</td>
                     <td>{{ subItem.descripcion }}</td>
+                    <td>{{ subItem.version }}</td>
                   </tr>
                 </template>
               </tbody>
