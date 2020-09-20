@@ -12,7 +12,7 @@ class LineaBaseService  {
 
       createbaseline(baseline) {
         return axios
-          .post(API_URL + 'createBaselines/' + baseline.proyecto_id, {
+          .post(API_URL + 'createBaselines/', {
             nombre: baseline.nombre,
             items: baseline.items_id,
             estado_id: baseline.estado_id

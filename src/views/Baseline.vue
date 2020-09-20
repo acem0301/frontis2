@@ -24,25 +24,15 @@
               <v-btn small color="primary" dark class="mb-2" v-on="on">Crear</v-btn>
             </template>
             <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
               <v-card-text>
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.nombre" label="Nombre de línea base"></v-text-field>
                     </v-col>
-                    <div v-if="editedIndex === -1">
-                      <v-col cols="12" sm="6" md="7">
-                        <v-select
-                          v-model="editedItem.proyecto_id"
-                          :items="projects"
-                          label="Proyecto"
-                          item-text="nombre"
-                          item-value="id"
-                          hide-details
-                          single-line
-                        ></v-select>
-                      </v-col>
-                    </div>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -114,6 +104,12 @@ export default {
     };
   },
 
+  computed: {
+    formTitle() {
+      return "Nueva Línea Base";
+    },
+  },
+
   methods: {
     close() {
       this.dialog = false;
@@ -126,9 +122,9 @@ export default {
     check: function (e, checked, item) {
       console.log(item);
       if (e) {
-        this.editedItem.items_id.push(item.id);
+        this.editedItem.items_id.push(item);
       } else {
-        this.deleteItemArray(this.editedItem.items_id, item.id);
+        this.deleteItemArray(this.editedItem.items_id, item);
       }
       console.log(this.editedItem.items_id);
     },
