@@ -1,12 +1,8 @@
 import axios from 'axios';
 import authHeader from './auth-header';
+import constant from '../constant/constant';
 
-<<<<<<< Updated upstream
-//const API_URL = 'https://backendis2.herokuapp.com/';
-const API_URL = 'http://localhost:3000/';
-=======
-import API_URL from '../constant/constant'
->>>>>>> Stashed changes
+const API_URL = constant.API_URL;
 class RolService {
   getPublicContent() {
     return axios.get(API_URL + 'all');

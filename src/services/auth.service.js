@@ -1,13 +1,8 @@
 import axios from 'axios';
-<<<<<<< Updated upstream
-import md5 from 'js-md5'
-//const API_URL = 'https://backendis2.herokuapp.com/';
-const API_URL = 'http://localhost:3000/';
-=======
 import md5 from 'js-md5';
-import API_URL from '../constant/constant'
->>>>>>> Stashed changes
+import constant from '../constant/constant';
 
+const API_URL = constant.API_URL
 class AuthService {
   login(user) {
     return axios

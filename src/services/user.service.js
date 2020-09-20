@@ -1,11 +1,8 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-<<<<<<< Updated upstream
-//const API_URL = 'https://backendis2.herokuapp.com/';
-const API_URL = 'http://localhost:3000/';
-=======
-import API_URL from '../constant/constant'
->>>>>>> Stashed changes
+import constant from '../constant/constant';
+
+const API_URL = constant.API_URL
 
 class UserService {
   deleteUser(id) {
