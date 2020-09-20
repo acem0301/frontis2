@@ -24,10 +24,6 @@
               <v-btn small color="primary" dark class="mb-2" v-on="on">Crear</v-btn>
             </template>
             <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -47,17 +43,6 @@
                         ></v-select>
                       </v-col>
                     </div>
-                    <v-col cols="13" sm="6" md="4">
-                      <v-select
-                        v-model="editedItem.estado_id"
-                        :items="estados"
-                        label="Estado"
-                        item-text="descripcion"
-                        item-value="id"
-                        hide-details
-                        single-line
-                      ></v-select>
-                    </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -74,7 +59,7 @@
 
       <template v-slot:item.actions="{ item }">
         <v-container fluid>
-          <v-checkbox v-model="checked" @change="check($event, checked, item)"></v-checkbox>
+          <v-checkbox :checked="checked" @change="check($event, checked, item)"></v-checkbox>
         </v-container>
       </template>
     </v-data-table>
@@ -91,7 +76,7 @@ export default {
   data() {
     return {
       dialog: false,
-      selected: [],
+      checked: false,
       headers: [
         {
           text: "Id ítem",
@@ -140,13 +125,12 @@ export default {
 
     check: function (e, checked, item) {
       console.log(item);
-      if (checked) {
+      if (e) {
         this.editedItem.items_id.push(item.id);
       } else {
         this.deleteItemArray(this.editedItem.items_id, item.id);
       }
       console.log(this.editedItem.items_id);
-      console.log(this.checkedCategories, e);
     },
 
     deleteItemArray(arr, item) {
