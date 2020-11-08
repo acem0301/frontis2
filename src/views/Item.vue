@@ -272,6 +272,9 @@ export default {
 
     changeStateFinalize(item) {
       ItemService.updateItemState(item.id);
+      this.alertMsg = "Tarea Finalizada";
+      this.showAlertSuccess = true;
+      this.getItems();
     },
   },
 

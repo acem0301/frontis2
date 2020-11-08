@@ -1,9 +1,6 @@
 <template>
   <div>
     <NavBar></NavBar>
-    <div class="container">
-      <header class="jumbotron"></header>
-    </div>
   </div>
 </template>
 
