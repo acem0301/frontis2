@@ -6,8 +6,8 @@ const API_URL = constant.API_URL;
 
 class ProjectService {
 
-  listProjects() {
-    return axios.get(API_URL + 'listProjects', {
+  listProjects(showProjectFinalized) {
+    return axios.get(API_URL + 'listProjects/' + showProjectFinalized, {
       headers: authHeader()
     });
   }

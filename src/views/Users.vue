@@ -216,7 +216,8 @@ export default {
       );
     },
      getProyecto() {
-      ProjectService.listProjects().then(
+      let showProjectFinalized = false;
+      ProjectService.listProjects(showProjectFinalized).then(
         response => {
           this.proyecto = response.data;
         },

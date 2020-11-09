@@ -156,7 +156,8 @@ export default {
     },
 
     getProjects() {
-      Project.listProjects().then(
+      let showProjectFinalized = true;
+      Project.listProjects(showProjectFinalized).then(
         (response) => {
           this.projects = response.data;
         },
